@@ -7,13 +7,20 @@ defmodule Envoy.Extensions.LoadBalancingPolicies.ClientSideWeightedRoundRobin.V3
   the endpoint weights are sent by the control plane via EDS. However,
   in this policy, the endpoint weights are instead determined via qps (queries
   per second), eps (errors per second), and utilization metrics sent by the
-  endpoint using the Open Request Cost Aggregation (ORCA) protocol. Utilization
-  is determined by using the ORCA application_utilization field, if set, or
-  else falling back to the cpu_utilization field. All queries count toward qps,
-  regardless of result. Only failed queries count toward eps. A config
-  parameter error_utilization_penalty controls the penalty to adjust endpoint
-  weights using eps and qps. The weight of a given endpoint is computed as:
-  ``qps / (utilization + eps/qps * error_utilization_penalty)``.
+  endpoint using the Open Request Cost Aggregation (ORCA) protocol. All queries
+  count toward qps, regardless of result. Only failed queries count toward eps.
+  A config parameter error_utilization_penalty controls the penalty to adjust
+  endpoint weights using eps and qps. The weight of a given endpoint is computed
+  as: ``qps / (utilization + eps/qps * error_utilization_penalty)``.
+
+  For a load report to update an endpoint's weight, it must set :ref:`rps_fractional
+  <envoy_v3_api_field_.xds.data.orca.v3.OrcaLoadReport.rps_fractional>` (used as
+  qps) greater than 0, and the final utilization (resolved utilization plus any
+  error penalty) must be greater than 0. Resolved utilization (see
+  :ref:`metric_names_for_computing_utilization
+  <envoy_v3_api_field_extensions.load_balancing_policies.client_side_weighted_round_robin.v3.ClientSideWeightedRoundRobin.metric_names_for_computing_utilization>`)
+  is used as the baseline. Reports that fail to do so are ignored, and an endpoint
+  with no valid weight is assigned the median weight of the endpoints that have one.
 
   Note that Envoy will forward the ORCA response headers/trailers from the upstream
   cluster to the downstream client. This means that if the downstream client is also
@@ -25,7 +32,7 @@ defmodule Envoy.Extensions.LoadBalancingPolicies.ClientSideWeightedRoundRobin.V3
   See the :ref:`load balancing architecture
   overview<arch_overview_load_balancing_types>` for more information.
 
-  [#next-free-field: 9]
+  [#next-free-field: 10]
   [#protodoc-title: Client-Side Weighted Round Robin Load Balancing Policy]
   [#extension: envoy.load_balancing_policies.client_side_weighted_round_robin]
   """
@@ -62,4 +69,8 @@ defmodule Envoy.Extensions.LoadBalancingPolicies.ClientSideWeightedRoundRobin.V3
   field :slow_start_config, 8,
     type: Envoy.Extensions.LoadBalancingPolicies.Common.V3.SlowStartConfig,
     json_name: "slowStartConfig"
+
+  field :oob_reporting_config, 9,
+    type: Envoy.Extensions.LoadBalancingPolicies.Common.V3.OrcaOobReportingConfig,
+    json_name: "oobReportingConfig"
 end

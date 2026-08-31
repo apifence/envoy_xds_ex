@@ -12,4 +12,5 @@ defmodule Envoy.Type.Matcher.V3.AddressMatcher do
     syntax: :proto3
 
   field :ranges, 1, repeated: true, type: Xds.Core.V3.CidrRange
+  field :invert_match, 2, type: :bool, json_name: "invertMatch"
 end

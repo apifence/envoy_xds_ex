@@ -16,6 +16,9 @@ defmodule Envoy.Extensions.TransportSockets.Http11Proxy.V3.Http11ProxyUpstreamTr
   Set ``typed_filter_metadata`` in :ref:`LbEndpoint.Metadata <envoy_v3_api_field_config.endpoint.v3.lbendpoint.metadata>` or :ref:`LocalityLbEndpoints.Metadata <envoy_v3_api_field_config.endpoint.v3.LocalityLbEndpoints.metadata>`.
   using the key ``envoy.http11_proxy_transport_socket.proxy_address`` and the
   proxy address in ``config::core::v3::Address`` format.
+
+  If the ``default_proxy_address`` is set and proxy address is not found in
+  ``typed_filter_metadata``, the default proxy address is used.
   [#protodoc-title: Upstream HTTP/1.1 Proxy]
   [#extension: envoy.transport_sockets.http_11_proxy]
   """
@@ -28,4 +31,8 @@ defmodule Envoy.Extensions.TransportSockets.Http11Proxy.V3.Http11ProxyUpstreamTr
   field :transport_socket, 1,
     type: Envoy.Config.Core.V3.TransportSocket,
     json_name: "transportSocket"
+
+  field :default_proxy_address, 2,
+    type: Envoy.Config.Core.V3.Address,
+    json_name: "defaultProxyAddress"
 end

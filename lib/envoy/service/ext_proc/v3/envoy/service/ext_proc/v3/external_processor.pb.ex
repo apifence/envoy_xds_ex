@@ -44,6 +44,86 @@ defmodule Envoy.Service.ExtProc.V3.ProtocolConfiguration do
     json_name: "sendBodyWithoutWaitingForHeaderResponse"
 end
 
+defmodule Envoy.Service.ExtProc.V3.ProcessingRequest.FlowControlInit do
+  @moduledoc """
+  Initial flow control window sizes for ``FULL_DUPLEX_STREAMED`` and
+  ``GRPC`` body send modes.
+
+  A sender starts with this amount of flow control window. Whenever
+  it sends body data, it must decrement its flow control window by
+  the number of bytes that it has sent. When its flow control
+  window is less than or equal to the amount of body data it wishes
+  to send, it may not send until it receives a window update causing
+  its flow control window to be large enough.
+
+  However, note that in ``GRPC`` body send mode, whenever the flow
+  control window is greater than zero, a sender may send a single
+  message, even if the size of that message exceeds the available flow
+  control window. At that point, the flow control window will be negative
+  and the sender must not send the next message until it becomes positive.
+
+  Note that the initial size for the to-sidestream windows are set by
+  the sender, not the receiver. This is because each sidestream may be
+  routed to a different ext_proc server instance, but there is no
+  connection-level handshake to set a default for that server
+  instance, so the only alternative here would be to have the
+  ext_proc server instance set this on a per-stream basis, which
+  would require an additional round-trip and therefore hurt latency.
+  This unfortunately means that the ext_proc server instance has a
+  bit less control: as soon as it receives these initial values, it can
+  immediately send a window update that reduces the window, but it
+  must be prepared to handle any data that the sender has already sent.
+  The initial sizes for the to-sidestream windows are generally
+  expected to be in the range of 32K to 64K.
+
+  [#not-implemented-hide:]
+  """
+
+  use Protobuf,
+    full_name: "envoy.service.ext_proc.v3.ProcessingRequest.FlowControlInit",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :initial_window_downstream_to_sidestream, 1,
+    type: :int64,
+    json_name: "initialWindowDownstreamToSidestream"
+
+  field :initial_window_sidestream_to_upstream, 2,
+    type: :int64,
+    json_name: "initialWindowSidestreamToUpstream"
+
+  field :initial_window_upstream_to_sidestream, 3,
+    type: :int64,
+    json_name: "initialWindowUpstreamToSidestream"
+
+  field :initial_window_sidestream_to_downstream, 4,
+    type: :int64,
+    json_name: "initialWindowSidestreamToDownstream"
+end
+
+defmodule Envoy.Service.ExtProc.V3.ProcessingRequest.ClientWindowUpdate do
+  @moduledoc """
+  Flow control window update. Values may be positive or negative. The
+  sender must immediately add these values to its flow control window,
+  which governs how much data can be sent.
+
+  [#not-implemented-hide:]
+  """
+
+  use Protobuf,
+    full_name: "envoy.service.ext_proc.v3.ProcessingRequest.ClientWindowUpdate",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :window_increment_sidestream_to_upstream, 1,
+    type: :int64,
+    json_name: "windowIncrementSidestreamToUpstream"
+
+  field :window_increment_sidestream_to_downstream, 2,
+    type: :int64,
+    json_name: "windowIncrementSidestreamToDownstream"
+end
+
 defmodule Envoy.Service.ExtProc.V3.ProcessingRequest.AttributesEntry do
   use Protobuf,
     full_name: "envoy.service.ext_proc.v3.ProcessingRequest.AttributesEntry",
@@ -59,7 +139,7 @@ defmodule Envoy.Service.ExtProc.V3.ProcessingRequest do
   @moduledoc """
   This represents the different types of messages that the data plane can send
   to an external processing server.
-  [#next-free-field: 12]
+  [#next-free-field: 14]
   """
 
   use Protobuf,
@@ -111,6 +191,48 @@ defmodule Envoy.Service.ExtProc.V3.ProcessingRequest do
   field :protocol_config, 11,
     type: Envoy.Service.ExtProc.V3.ProtocolConfiguration,
     json_name: "protocolConfig"
+
+  field :flow_control_init, 12,
+    type: Envoy.Service.ExtProc.V3.ProcessingRequest.FlowControlInit,
+    json_name: "flowControlInit"
+
+  field :client_window_update, 13,
+    type: Envoy.Service.ExtProc.V3.ProcessingRequest.ClientWindowUpdate,
+    json_name: "clientWindowUpdate"
+end
+
+defmodule Envoy.Service.ExtProc.V3.ProcessingResponse.ServerWindowUpdate do
+  @moduledoc """
+  Flow control window update. Values may be positive or negative. The
+  sender must immediately add these values to its flow control window,
+  which governs how much data can be sent.
+
+  [#not-implemented-hide:]
+  """
+
+  use Protobuf,
+    full_name: "envoy.service.ext_proc.v3.ProcessingResponse.ServerWindowUpdate",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :window_increment_downstream_to_sidestream, 1,
+    type: :int64,
+    json_name: "windowIncrementDownstreamToSidestream"
+
+  field :window_increment_upstream_to_sidestream, 2,
+    type: :int64,
+    json_name: "windowIncrementUpstreamToSidestream"
+end
+
+defmodule Envoy.Service.ExtProc.V3.ProcessingResponse.TypedDynamicMetadataEntry do
+  use Protobuf,
+    full_name: "envoy.service.ext_proc.v3.ProcessingResponse.TypedDynamicMetadataEntry",
+    map: true,
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :key, 1, type: :string
+  field :value, 2, type: Google.Protobuf.Any
 end
 
 defmodule Envoy.Service.ExtProc.V3.ProcessingResponse do
@@ -124,7 +246,7 @@ defmodule Envoy.Service.ExtProc.V3.ProcessingResponse do
     the server must send back exactly one ``ProcessingResponse`` message.
   * If it is set to ``FULL_DUPLEX_STREAMED``, the server must follow the API defined
     for this mode to send the ``ProcessingResponse`` messages.
-  [#next-free-field: 13]
+  [#next-free-field: 17]
   """
 
   use Protobuf,
@@ -176,15 +298,27 @@ defmodule Envoy.Service.ExtProc.V3.ProcessingResponse do
 
   field :dynamic_metadata, 8, type: Google.Protobuf.Struct, json_name: "dynamicMetadata"
 
+  field :typed_dynamic_metadata, 13,
+    repeated: true,
+    type: Envoy.Service.ExtProc.V3.ProcessingResponse.TypedDynamicMetadataEntry,
+    json_name: "typedDynamicMetadata",
+    map: true
+
   field :mode_override, 9,
     type: Envoy.Extensions.Filters.Http.ExtProc.V3.ProcessingMode,
     json_name: "modeOverride"
 
-  field :request_drain, 12, type: :bool, json_name: "requestDrain"
+  field :request_drain, 12, type: :bool, json_name: "requestDrain", deprecated: true
+  field :request_drain_requests, 15, type: :bool, json_name: "requestDrainRequests"
+  field :request_drain_responses, 16, type: :bool, json_name: "requestDrainResponses"
 
   field :override_message_timeout, 10,
     type: Google.Protobuf.Duration,
     json_name: "overrideMessageTimeout"
+
+  field :server_window_update, 14,
+    type: Envoy.Service.ExtProc.V3.ProcessingResponse.ServerWindowUpdate,
+    json_name: "serverWindowUpdate"
 end
 
 defmodule Envoy.Service.ExtProc.V3.HttpHeaders.AttributesEntry do
@@ -225,6 +359,7 @@ defmodule Envoy.Service.ExtProc.V3.HttpBody do
   @moduledoc """
   This message is sent to the external server when the HTTP request and response bodies are
   received.
+  [#next-free-field: 6]
   """
 
   use Protobuf,
@@ -236,6 +371,7 @@ defmodule Envoy.Service.ExtProc.V3.HttpBody do
   field :end_of_stream, 2, type: :bool, json_name: "endOfStream"
   field :end_of_stream_without_message, 3, type: :bool, json_name: "endOfStreamWithoutMessage"
   field :grpc_message_compressed, 4, type: :bool, json_name: "grpcMessageCompressed"
+  field :drain_complete, 5, type: :bool, json_name: "drainComplete"
 end
 
 defmodule Envoy.Service.ExtProc.V3.HttpTrailers do
@@ -410,6 +546,7 @@ end
 defmodule Envoy.Service.ExtProc.V3.StreamedBodyResponse do
   @moduledoc """
   The body response message corresponding to ``FULL_DUPLEX_STREAMED`` or ``GRPC`` body modes.
+  [#next-free-field: 6]
   """
 
   use Protobuf,
@@ -421,6 +558,7 @@ defmodule Envoy.Service.ExtProc.V3.StreamedBodyResponse do
   field :end_of_stream, 2, type: :bool, json_name: "endOfStream"
   field :end_of_stream_without_message, 3, type: :bool, json_name: "endOfStreamWithoutMessage"
   field :grpc_message_compressed, 4, type: :bool, json_name: "grpcMessageCompressed"
+  field :drain_complete, 5, type: :bool, json_name: "drainComplete"
 end
 
 defmodule Envoy.Service.ExtProc.V3.BodyMutation do

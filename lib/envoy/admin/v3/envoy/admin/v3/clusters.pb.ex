@@ -80,7 +80,7 @@ end
 defmodule Envoy.Admin.V3.HostHealthStatus do
   @moduledoc """
   Health status for a host.
-  [#next-free-field: 9]
+  [#next-free-field: 10]
   """
 
   use Protobuf,
@@ -95,6 +95,10 @@ defmodule Envoy.Admin.V3.HostHealthStatus do
   field :pending_active_hc, 6, type: :bool, json_name: "pendingActiveHc"
   field :excluded_via_immediate_hc_fail, 7, type: :bool, json_name: "excludedViaImmediateHcFail"
   field :active_hc_timeout, 8, type: :bool, json_name: "activeHcTimeout"
+
+  field :failed_degraded_outlier_detection, 9,
+    type: :bool,
+    json_name: "failedDegradedOutlierDetection"
 
   field :eds_health_status, 3,
     type: Envoy.Config.Core.V3.HealthStatus,

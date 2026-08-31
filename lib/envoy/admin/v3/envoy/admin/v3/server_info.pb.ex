@@ -49,7 +49,7 @@ defmodule Envoy.Admin.V3.ServerInfo do
   @moduledoc """
   Proto representation of the value returned by /server_info, containing
   server version/server status information.
-  [#next-free-field: 8]
+  [#next-free-field: 9]
   [#protodoc-title: Server state]
   """
 
@@ -69,11 +69,12 @@ defmodule Envoy.Admin.V3.ServerInfo do
     json_name: "commandLineOptions"
 
   field :node, 7, type: Envoy.Config.Core.V3.Node
+  field :hot_restart_initializing, 8, type: :bool, json_name: "hotRestartInitializing"
 end
 
 defmodule Envoy.Admin.V3.CommandLineOptions do
   @moduledoc """
-  [#next-free-field: 43]
+  [#next-free-field: 44]
   """
 
   use Protobuf,
@@ -125,6 +126,7 @@ defmodule Envoy.Admin.V3.CommandLineOptions do
   field :cpuset_threads, 25, type: :bool, json_name: "cpusetThreads"
   field :disabled_extensions, 28, repeated: true, type: :string, json_name: "disabledExtensions"
   field :enable_fine_grain_logging, 34, type: :bool, json_name: "enableFineGrainLogging"
+  field :log_stacktrace_single_entry, 43, type: :bool, json_name: "logStacktraceSingleEntry"
   field :socket_path, 35, type: :string, json_name: "socketPath"
   field :socket_mode, 36, type: :uint32, json_name: "socketMode"
   field :enable_core_dump, 37, type: :bool, json_name: "enableCoreDump"

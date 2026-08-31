@@ -2,6 +2,7 @@ defmodule Envoy.Data.Tap.V3.TraceWrapper do
   @moduledoc """
   Wrapper for all fully buffered and streamed tap traces that Envoy emits. This is required for
   sending traces over gRPC APIs or more easily persisting binary messages to files.
+  [#next-free-field: 6]
   [#protodoc-title: Tap data wrappers]
   """
 
@@ -31,4 +32,8 @@ defmodule Envoy.Data.Tap.V3.TraceWrapper do
     type: Envoy.Data.Tap.V3.SocketStreamedTraceSegment,
     json_name: "socketStreamedTraceSegment",
     oneof: 0
+
+  field :configured_sample_rate, 5,
+    type: Envoy.Type.V3.FractionalPercent,
+    json_name: "configuredSampleRate"
 end

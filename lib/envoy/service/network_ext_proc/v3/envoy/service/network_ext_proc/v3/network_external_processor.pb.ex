@@ -44,11 +44,22 @@ defmodule Envoy.Service.NetworkExtProc.V3.Data do
   field :end_of_stream, 2, type: :bool, json_name: "endOfStream"
 end
 
+defmodule Envoy.Service.NetworkExtProc.V3.ProcessingRequest.AttributesEntry do
+  use Protobuf,
+    full_name: "envoy.service.network_ext_proc.v3.ProcessingRequest.AttributesEntry",
+    map: true,
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :key, 1, type: :string
+  field :value, 2, type: Google.Protobuf.Struct
+end
+
 defmodule Envoy.Service.NetworkExtProc.V3.ProcessingRequest do
   @moduledoc """
   ProcessingRequest contains data sent from Envoy to the external processing server.
   Each request contains either read data (from client) or write data (to client)
-  along with optional metadata.
+  along with optional metadata and attributes.
   """
 
   use Protobuf,
@@ -59,6 +70,11 @@ defmodule Envoy.Service.NetworkExtProc.V3.ProcessingRequest do
   field :read_data, 1, type: Envoy.Service.NetworkExtProc.V3.Data, json_name: "readData"
   field :write_data, 2, type: Envoy.Service.NetworkExtProc.V3.Data, json_name: "writeData"
   field :metadata, 3, type: Envoy.Config.Core.V3.Metadata
+
+  field :attributes, 4,
+    repeated: true,
+    type: Envoy.Service.NetworkExtProc.V3.ProcessingRequest.AttributesEntry,
+    map: true
 end
 
 defmodule Envoy.Service.NetworkExtProc.V3.ProcessingResponse do
@@ -66,7 +82,7 @@ defmodule Envoy.Service.NetworkExtProc.V3.ProcessingResponse do
   ProcessingResponse contains the response from the external processing server to Envoy.
   Each response corresponds to a ProcessingRequest and indicates how the network
   traffic should be handled.
-  [#next-free-field: 6]
+  [#next-free-field: 7]
   """
 
   use Protobuf,
@@ -88,6 +104,7 @@ defmodule Envoy.Service.NetworkExtProc.V3.ProcessingResponse do
     enum: true
 
   field :dynamic_metadata, 5, type: Google.Protobuf.Struct, json_name: "dynamicMetadata"
+  field :close_stream_to_ext_proc_server, 6, type: :bool, json_name: "closeStreamToExtProcServer"
 end
 
 defmodule Envoy.Service.NetworkExtProc.V3.NetworkExternalProcessor.Service do

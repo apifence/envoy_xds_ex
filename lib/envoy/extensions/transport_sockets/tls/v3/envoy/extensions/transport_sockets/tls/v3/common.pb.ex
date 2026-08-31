@@ -20,6 +20,8 @@ defmodule Envoy.Extensions.TransportSockets.Tls.V3.TlsParameters.CompliancePolic
     syntax: :proto3
 
   field :FIPS_202205, 0
+  field :CNSA2_202603, 1
+  field :CNSA1_202603, 2
 end
 
 defmodule Envoy.Extensions.TransportSockets.Tls.V3.SubjectAltNameMatcher.SanType do
@@ -213,7 +215,7 @@ end
 
 defmodule Envoy.Extensions.TransportSockets.Tls.V3.CertificateValidationContext do
   @moduledoc """
-  [#next-free-field: 18]
+  [#next-free-field: 19]
   """
 
   use Protobuf,
@@ -286,4 +288,6 @@ defmodule Envoy.Extensions.TransportSockets.Tls.V3.CertificateValidationContext 
     type: Google.Protobuf.UInt32Value,
     json_name: "maxVerifyDepth",
     deprecated: false
+
+  field :suppress_client_ca_list, 18, type: :bool, json_name: "suppressClientCaList"
 end

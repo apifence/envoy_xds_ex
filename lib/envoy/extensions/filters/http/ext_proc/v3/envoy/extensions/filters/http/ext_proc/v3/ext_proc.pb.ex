@@ -81,7 +81,7 @@ defmodule Envoy.Extensions.Filters.Http.ExtProc.V3.ExternalProcessor do
   <arch_overview_advanced_filter_state_sharing>` object in a namespace matching the filter
   name.
 
-  [#next-free-field: 26]
+  [#next-free-field: 27]
   [#protodoc-title: External Processing Filter]
   External Processing Filter
   [#extension: envoy.filters.http.ext_proc]
@@ -177,6 +177,7 @@ defmodule Envoy.Extensions.Filters.Http.ExtProc.V3.ExternalProcessor do
     deprecated: false
 
   field :status_on_error, 24, type: Envoy.Type.V3.HttpStatus, json_name: "statusOnError"
+  field :allow_content_length_header, 26, type: :bool, json_name: "allowContentLengthHeader"
 end
 
 defmodule Envoy.Extensions.Filters.Http.ExtProc.V3.ExtProcHttpService do

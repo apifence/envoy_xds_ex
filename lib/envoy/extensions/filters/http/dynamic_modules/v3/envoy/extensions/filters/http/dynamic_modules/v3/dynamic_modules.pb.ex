@@ -43,6 +43,11 @@ defmodule Envoy.Extensions.Filters.Http.DynamicModules.V3.DynamicModuleFilterPer
     type: Envoy.Extensions.DynamicModules.V3.DynamicModuleConfig,
     json_name: "dynamicModuleConfig"
 
-  field :per_route_config_name, 2, type: :string, json_name: "perRouteConfigName"
+  field :per_route_config_name, 2,
+    type: :string,
+    json_name: "perRouteConfigName",
+    deprecated: true
+
+  field :filter_name, 4, type: :string, json_name: "filterName"
   field :filter_config, 3, type: Google.Protobuf.Any, json_name: "filterConfig"
 end

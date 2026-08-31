@@ -23,4 +23,9 @@ defmodule Envoy.Extensions.Filters.Network.SetFilterState.V3.Config do
     repeated: true,
     type: Envoy.Extensions.Filters.Common.SetFilterState.V3.FilterStateValue,
     json_name: "onDownstreamTlsHandshake"
+
+  field :on_downstream_data, 3,
+    repeated: true,
+    type: Envoy.Extensions.Filters.Common.SetFilterState.V3.FilterStateValue,
+    json_name: "onDownstreamData"
 end

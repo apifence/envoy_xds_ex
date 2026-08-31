@@ -32,7 +32,7 @@ end
 
 defmodule Envoy.Extensions.StatSinks.OpenTelemetry.V3.SinkConfig do
   @moduledoc """
-  [#next-free-field: 9]
+  [#next-free-field: 11]
   [#protodoc-title: Open Telemetry Stats Sink]
   Stats configuration proto schema for ``envoy.stat_sinks.open_telemetry`` sink.
   [#extension: envoy.stat_sinks.open_telemetry]
@@ -50,6 +50,11 @@ defmodule Envoy.Extensions.StatSinks.OpenTelemetry.V3.SinkConfig do
     json_name: "grpcService",
     oneof: 0,
     deprecated: false
+
+  field :http_service, 9,
+    type: Envoy.Config.Core.V3.HttpService,
+    json_name: "httpService",
+    oneof: 0
 
   field :resource_detectors, 7,
     repeated: true,
@@ -72,4 +77,6 @@ defmodule Envoy.Extensions.StatSinks.OpenTelemetry.V3.SinkConfig do
   field :custom_metric_conversions, 8,
     type: Xds.Type.Matcher.V3.Matcher,
     json_name: "customMetricConversions"
+
+  field :max_data_points_per_request, 10, type: :uint32, json_name: "maxDataPointsPerRequest"
 end

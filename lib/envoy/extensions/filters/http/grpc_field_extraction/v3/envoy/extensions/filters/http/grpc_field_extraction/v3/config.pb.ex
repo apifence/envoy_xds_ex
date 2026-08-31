@@ -138,6 +138,37 @@ defmodule Envoy.Extensions.Filters.Http.GrpcFieldExtraction.V3.GrpcFieldExtracti
   	  "baz":[
   	  ]
   	}
+
+  Normalizing the metadata key
+  ----------------------------
+
+  By default the dynamic metadata key is the field path. ``metadata_key`` overrides it, which
+  allows different gRPC methods to write the same logical value under a common key.
+
+  .. code-block:: json
+
+  	{
+  	  "descriptor_set":{},
+  	  "extractions_by_method":{
+  	     "pkg.svc.Method":{
+  	        "request_field_extractions":{
+  	           "nested.bar":{
+  	              "metadata_key":"bar"
+  	           }
+  	        }
+  	     }
+  	  }
+  	}
+
+  writes
+
+  .. code-block:: json
+
+  	{
+  	  "bar":[
+  	     "val_bar1", "val_bar2"
+  	  ]
+  	}
   """
 
   use Protobuf,
@@ -201,4 +232,5 @@ defmodule Envoy.Extensions.Filters.Http.GrpcFieldExtraction.V3.RequestFieldValue
   oneof :disposition, 0
 
   field :dynamic_metadata, 1, type: :string, json_name: "dynamicMetadata", oneof: 0
+  field :metadata_key, 2, type: :string, json_name: "metadataKey"
 end

@@ -34,6 +34,17 @@ defmodule Envoy.Config.Bootstrap.V3.CustomInlineHeader.InlineHeaderType do
   field :RESPONSE_TRAILER, 3
 end
 
+defmodule Envoy.Config.Bootstrap.V3.ApiListenerManager.ThreadingModel do
+  use Protobuf,
+    enum: true,
+    full_name: "envoy.config.bootstrap.v3.ApiListenerManager.ThreadingModel",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :MAIN_THREAD_ONLY, 0
+  field :STANDALONE_WORKER_THREAD, 1
+end
+
 defmodule Envoy.Config.Bootstrap.V3.Bootstrap.StaticResources do
   use Protobuf,
     full_name: "envoy.config.bootstrap.v3.Bootstrap.StaticResources",
@@ -120,7 +131,7 @@ end
 defmodule Envoy.Config.Bootstrap.V3.Bootstrap do
   @moduledoc """
   Bootstrap :ref:`configuration overview <config_overview_bootstrap>`.
-  [#next-free-field: 43]
+  [#next-free-field: 44]
   [#protodoc-title: Bootstrap]
   This proto is supplied via the :option:`-c` CLI flag and acts as the root
   of the Envoy v3 configuration. See the :ref:`v3 configuration overview
@@ -279,6 +290,8 @@ defmodule Envoy.Config.Bootstrap.V3.Bootstrap do
   field :memory_allocator_manager, 41,
     type: Envoy.Config.Bootstrap.V3.MemoryAllocatorManager,
     json_name: "memoryAllocatorManager"
+
+  field :enable_worker_cpu_affinity, 43, type: :bool, json_name: "enableWorkerCpuAffinity"
 end
 
 defmodule Envoy.Config.Bootstrap.V3.Admin do
@@ -584,6 +597,10 @@ defmodule Envoy.Config.Bootstrap.V3.CustomInlineHeader do
 end
 
 defmodule Envoy.Config.Bootstrap.V3.MemoryAllocatorManager do
+  @moduledoc """
+  [#next-free-field: 6]
+  """
+
   use Protobuf,
     full_name: "envoy.config.bootstrap.v3.MemoryAllocatorManager",
     protoc_gen_elixir_version: "0.17.0",
@@ -594,4 +611,58 @@ defmodule Envoy.Config.Bootstrap.V3.MemoryAllocatorManager do
   field :memory_release_interval, 2,
     type: Google.Protobuf.Duration,
     json_name: "memoryReleaseInterval"
+
+  field :soft_memory_limit_bytes, 3,
+    type: Google.Protobuf.UInt64Value,
+    json_name: "softMemoryLimitBytes"
+
+  field :max_per_cpu_cache_size_bytes, 4,
+    type: Google.Protobuf.UInt32Value,
+    json_name: "maxPerCpuCacheSizeBytes"
+
+  field :max_unfreed_memory_bytes, 5, type: :uint64, json_name: "maxUnfreedMemoryBytes"
+end
+
+defmodule Envoy.Config.Bootstrap.V3.ListenerManager do
+  @moduledoc """
+  A placeholder proto so that users can explicitly configure the standard
+  Listener Manager via the bootstrap's :ref:`listener_manager <envoy_v3_api_field_config.bootstrap.v3.Bootstrap.listener_manager>`.
+  [#not-implemented-hide:]
+  """
+
+  use Protobuf,
+    full_name: "envoy.config.bootstrap.v3.ListenerManager",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+end
+
+defmodule Envoy.Config.Bootstrap.V3.ValidationListenerManager do
+  @moduledoc """
+  A placeholder proto so that users can explicitly configure the standard
+  Validation Listener Manager via the bootstrap's :ref:`listener_manager <envoy_v3_api_field_config.bootstrap.v3.Bootstrap.listener_manager>`.
+  [#not-implemented-hide:]
+  """
+
+  use Protobuf,
+    full_name: "envoy.config.bootstrap.v3.ValidationListenerManager",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+end
+
+defmodule Envoy.Config.Bootstrap.V3.ApiListenerManager do
+  @moduledoc """
+  A placeholder proto so that users can explicitly configure the API
+  Listener Manager via the bootstrap's :ref:`listener_manager <envoy_v3_api_field_config.bootstrap.v3.Bootstrap.listener_manager>`.
+  [#not-implemented-hide:]
+  """
+
+  use Protobuf,
+    full_name: "envoy.config.bootstrap.v3.ApiListenerManager",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :threading_model, 1,
+    type: Envoy.Config.Bootstrap.V3.ApiListenerManager.ThreadingModel,
+    json_name: "threadingModel",
+    enum: true
 end

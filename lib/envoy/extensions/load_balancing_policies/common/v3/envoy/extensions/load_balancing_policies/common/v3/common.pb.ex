@@ -142,3 +142,25 @@ defmodule Envoy.Extensions.LoadBalancingPolicies.Common.V3.ConsistentHashingLbCo
     type: Envoy.Config.Route.V3.RouteAction.HashPolicy,
     json_name: "hashPolicy"
 end
+
+defmodule Envoy.Extensions.LoadBalancingPolicies.Common.V3.OrcaOobReportingConfig do
+  @moduledoc """
+  Connection overrides for the ORCA out-of-band (OOB) reporting stream, used by
+  load balancing policies that consume ORCA load reports (e.g.
+  :ref:`client_side_weighted_round_robin
+  <envoy_v3_api_msg_extensions.load_balancing_policies.client_side_weighted_round_robin.v3.ClientSideWeightedRoundRobin>`).
+  Whether and when OOB reporting runs is controlled by the embedding policy.
+  """
+
+  use Protobuf,
+    full_name: "envoy.extensions.load_balancing_policies.common.v3.OrcaOobReportingConfig",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :port_value, 1, type: :uint32, json_name: "portValue", deprecated: false
+  field :authority, 2, type: :string, deprecated: false
+
+  field :transport_socket_match_criteria, 3,
+    type: Google.Protobuf.Struct,
+    json_name: "transportSocketMatchCriteria"
+end

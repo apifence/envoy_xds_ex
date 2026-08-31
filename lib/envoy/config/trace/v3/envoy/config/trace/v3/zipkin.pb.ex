@@ -34,7 +34,7 @@ defmodule Envoy.Config.Trace.V3.ZipkinConfig do
   @moduledoc """
   Configuration for the Zipkin tracer.
   [#extension: envoy.tracers.zipkin]
-  [#next-free-field: 10]
+  [#next-free-field: 11]
   [#protodoc-title: Zipkin tracer]
   """
 
@@ -68,4 +68,6 @@ defmodule Envoy.Config.Trace.V3.ZipkinConfig do
   field :collector_service, 9,
     type: Envoy.Config.Core.V3.HttpService,
     json_name: "collectorService"
+
+  field :timestamp_trace_ids, 10, type: :bool, json_name: "timestampTraceIds"
 end

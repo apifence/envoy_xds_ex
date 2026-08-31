@@ -73,6 +73,36 @@ defmodule Envoy.Config.Listener.V3.Listener.ConnectionBalanceConfig.ExactBalance
     syntax: :proto3
 end
 
+defmodule Envoy.Config.Listener.V3.Listener.ConnectionBalanceConfig.CpuLocalityBalance do
+  @moduledoc """
+  A connection balancer that steers each new TCP connection to the worker thread pinned to the
+  CPU that received the connection, using a kernel ``SO_REUSEPORT`` BPF program. This removes
+  the lock that the :ref:`exact balancer
+  <envoy_v3_api_msg_config.listener.v3.Listener.ConnectionBalanceConfig.ExactBalance>` takes on
+  every accept and keeps each connection on a single worker for cache and ``NUMA`` locality. To
+  realize locality the operator should align ``NIC`` receive steering so connections arrive on
+  the worker CPUs, for example with receive side scaling or ``IRQ`` affinity.
+
+  It is available on Linux only and requires :ref:`enable_worker_cpu_affinity
+  <envoy_v3_api_field_config.bootstrap.v3.Bootstrap.enable_worker_cpu_affinity>` so worker ``i``
+  is pinned to the CPU the program steers to it, :ref:`enable_reuse_port
+  <envoy_v3_api_field_config.listener.v3.Listener.enable_reuse_port>`, a kernel that supports
+  reuse port BPF steering, and a worker count no greater than the number of CPUs in the process
+  affinity mask. When any of these is not met, or if the kernel rejects the steering program at
+  runtime, the listener keeps serving with the kernel default reuse port hashing and without CPU
+  locality.
+
+  Worker affinity is fixed when the worker threads start, so a listener added dynamically via LDS
+  steers with the same mapping. During a hot restart new connections may be steered to the
+  draining parent process until it exits.
+  """
+
+  use Protobuf,
+    full_name: "envoy.config.listener.v3.Listener.ConnectionBalanceConfig.CpuLocalityBalance",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+end
+
 defmodule Envoy.Config.Listener.V3.Listener.ConnectionBalanceConfig do
   @moduledoc """
   Configuration for listener connection balancing.
@@ -93,6 +123,11 @@ defmodule Envoy.Config.Listener.V3.Listener.ConnectionBalanceConfig do
   field :extend_balance, 2,
     type: Envoy.Config.Core.V3.TypedExtensionConfig,
     json_name: "extendBalance",
+    oneof: 0
+
+  field :cpu_locality_balance, 3,
+    type: Envoy.Config.Listener.V3.Listener.ConnectionBalanceConfig.CpuLocalityBalance,
+    json_name: "cpuLocalityBalance",
     oneof: 0
 end
 
@@ -124,7 +159,7 @@ end
 
 defmodule Envoy.Config.Listener.V3.Listener do
   @moduledoc """
-  [#next-free-field: 38]
+  [#next-free-field: 40]
   """
 
   use Protobuf,
@@ -143,6 +178,7 @@ defmodule Envoy.Config.Listener.V3.Listener do
     json_name: "additionalAddresses"
 
   field :stat_prefix, 28, type: :string, json_name: "statPrefix"
+  field :stats_matcher, 39, type: Envoy.Config.Metrics.V3.StatsMatcher, json_name: "statsMatcher"
 
   field :filter_chains, 3,
     repeated: true,
@@ -166,6 +202,11 @@ defmodule Envoy.Config.Listener.V3.Listener do
   field :per_connection_buffer_limit_bytes, 5,
     type: Google.Protobuf.UInt32Value,
     json_name: "perConnectionBufferLimitBytes",
+    deprecated: false
+
+  field :per_connection_buffer_high_watermark_timeout, 38,
+    type: Google.Protobuf.Duration,
+    json_name: "perConnectionBufferHighWatermarkTimeout",
     deprecated: false
 
   field :metadata, 6, type: Envoy.Config.Core.V3.Metadata
@@ -246,43 +287,4 @@ defmodule Envoy.Config.Listener.V3.Listener do
   field :ignore_global_conn_limit, 31, type: :bool, json_name: "ignoreGlobalConnLimit"
   field :bypass_overload_manager, 35, type: :bool, json_name: "bypassOverloadManager"
   field :tcp_keepalive, 37, type: Envoy.Config.Core.V3.TcpKeepalive, json_name: "tcpKeepalive"
-end
-
-defmodule Envoy.Config.Listener.V3.ListenerManager do
-  @moduledoc """
-  A placeholder proto so that users can explicitly configure the standard
-  Listener Manager via the bootstrap's :ref:`listener_manager <envoy_v3_api_field_config.bootstrap.v3.Bootstrap.listener_manager>`.
-  [#not-implemented-hide:]
-  """
-
-  use Protobuf,
-    full_name: "envoy.config.listener.v3.ListenerManager",
-    protoc_gen_elixir_version: "0.17.0",
-    syntax: :proto3
-end
-
-defmodule Envoy.Config.Listener.V3.ValidationListenerManager do
-  @moduledoc """
-  A placeholder proto so that users can explicitly configure the standard
-  Validation Listener Manager via the bootstrap's :ref:`listener_manager <envoy_v3_api_field_config.bootstrap.v3.Bootstrap.listener_manager>`.
-  [#not-implemented-hide:]
-  """
-
-  use Protobuf,
-    full_name: "envoy.config.listener.v3.ValidationListenerManager",
-    protoc_gen_elixir_version: "0.17.0",
-    syntax: :proto3
-end
-
-defmodule Envoy.Config.Listener.V3.ApiListenerManager do
-  @moduledoc """
-  A placeholder proto so that users can explicitly configure the API
-  Listener Manager via the bootstrap's :ref:`listener_manager <envoy_v3_api_field_config.bootstrap.v3.Bootstrap.listener_manager>`.
-  [#not-implemented-hide:]
-  """
-
-  use Protobuf,
-    full_name: "envoy.config.listener.v3.ApiListenerManager",
-    protoc_gen_elixir_version: "0.17.0",
-    syntax: :proto3
 end

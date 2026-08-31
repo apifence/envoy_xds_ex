@@ -35,7 +35,7 @@ defmodule Envoy.Extensions.Filters.Common.SetFilterState.V3.FilterStateValue do
     json_name: "formatString",
     oneof: 1
 
-  field :read_only, 3, type: :bool, json_name: "readOnly"
+  field :read_only, 3, type: :bool, json_name: "readOnly", deprecated: true
 
   field :shared_with_upstream, 4,
     type: Envoy.Extensions.Filters.Common.SetFilterState.V3.FilterStateValue.SharedWithUpstream,

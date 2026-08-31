@@ -91,7 +91,7 @@ end
 
 defmodule Envoy.Config.Core.V3.BindConfig do
   @moduledoc """
-  [#next-free-field: 7]
+  [#next-free-field: 8]
   """
 
   use Protobuf,
@@ -121,6 +121,8 @@ defmodule Envoy.Config.Core.V3.BindConfig do
   field :local_address_selector, 6,
     type: Envoy.Config.Core.V3.TypedExtensionConfig,
     json_name: "localAddressSelector"
+
+  field :validate_network_namespaces, 7, type: :bool, json_name: "validateNetworkNamespaces"
 end
 
 defmodule Envoy.Config.Core.V3.Address do

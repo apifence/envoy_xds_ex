@@ -13,6 +13,24 @@ defmodule Envoy.Extensions.Filters.Listener.ProxyProtocol.V3.ProxyProtocol.TlvLo
   field :FILTER_STATE, 1
 end
 
+defmodule Envoy.Extensions.Filters.Listener.ProxyProtocol.V3.ProxyProtocol.KeyValuePair.ValueStringEncoding do
+  @moduledoc """
+  Specifies the encoding scheme that is used to encode the TLV value before it is
+  stored in dynamic metadata or filter state.
+  """
+
+  use Protobuf,
+    enum: true,
+    full_name:
+      "envoy.extensions.filters.listener.proxy_protocol.v3.ProxyProtocol.KeyValuePair.ValueStringEncoding",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :UNSPECIFIED, 0
+  field :SANITIZED_UTF8, 1
+  field :BASE64, 2
+end
+
 defmodule Envoy.Extensions.Filters.Listener.ProxyProtocol.V3.ProxyProtocol.KeyValuePair do
   use Protobuf,
     full_name: "envoy.extensions.filters.listener.proxy_protocol.v3.ProxyProtocol.KeyValuePair",
@@ -21,6 +39,12 @@ defmodule Envoy.Extensions.Filters.Listener.ProxyProtocol.V3.ProxyProtocol.KeyVa
 
   field :metadata_namespace, 1, type: :string, json_name: "metadataNamespace"
   field :key, 2, type: :string, deprecated: false
+
+  field :value_string_encoding, 3,
+    type:
+      Envoy.Extensions.Filters.Listener.ProxyProtocol.V3.ProxyProtocol.KeyValuePair.ValueStringEncoding,
+    json_name: "valueStringEncoding",
+    enum: true
 end
 
 defmodule Envoy.Extensions.Filters.Listener.ProxyProtocol.V3.ProxyProtocol.Rule do

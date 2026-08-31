@@ -148,4 +148,6 @@ defmodule Envoy.Extensions.Filters.Http.McpRouter.V3.McpRouter do
   field :session_identity, 2,
     type: Envoy.Extensions.Filters.Http.McpRouter.V3.SessionIdentity,
     json_name: "sessionIdentity"
+
+  field :lazy_initialization, 3, type: :bool, json_name: "lazyInitialization"
 end

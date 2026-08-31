@@ -295,13 +295,21 @@ end
 
 defmodule Envoy.Extensions.Filters.Http.JwtAuthn.V3.ExtractOnlyWithoutValidation do
   @moduledoc """
-  Reserved for future extensions (e.g., claim filtering, logging options)
+  Configuration for extract-only mode without JWT signature validation.
+
+  When this mode is active and a JWT is present in the request but fails
+  signature verification, a verification status header is set on the request
+  to signal to downstream filters (RBAC, ext_authz) that the JWT claims were
+  NOT cryptographically verified. The header is not set when the JWT is valid
+  or when no JWT is present.
   """
 
   use Protobuf,
     full_name: "envoy.extensions.filters.http.jwt_authn.v3.ExtractOnlyWithoutValidation",
     protoc_gen_elixir_version: "0.17.0",
     syntax: :proto3
+
+  field :verification_status_header, 1, type: :string, json_name: "verificationStatusHeader"
 end
 
 defmodule Envoy.Extensions.Filters.Http.JwtAuthn.V3.JwtRequirementOrList do
@@ -543,6 +551,19 @@ defmodule Envoy.Extensions.Filters.Http.JwtAuthn.V3.PerRouteConfig do
     deprecated: false
 end
 
+defmodule Envoy.Extensions.Filters.Http.JwtAuthn.V3.JwtClaimToHeader.PathSegment do
+  @moduledoc """
+  Specifies a segment in a path for retrieving a claim from the JWT payload.
+  """
+
+  use Protobuf,
+    full_name: "envoy.extensions.filters.http.jwt_authn.v3.JwtClaimToHeader.PathSegment",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :key, 1, type: :string, deprecated: false
+end
+
 defmodule Envoy.Extensions.Filters.Http.JwtAuthn.V3.JwtClaimToHeader do
   @moduledoc """
   This message specifies a combination of header name and claim name.
@@ -554,5 +575,10 @@ defmodule Envoy.Extensions.Filters.Http.JwtAuthn.V3.JwtClaimToHeader do
     syntax: :proto3
 
   field :header_name, 1, type: :string, json_name: "headerName", deprecated: false
-  field :claim_name, 2, type: :string, json_name: "claimName", deprecated: false
+  field :claim_name, 2, type: :string, json_name: "claimName"
+
+  field :claim_path, 3,
+    repeated: true,
+    type: Envoy.Extensions.Filters.Http.JwtAuthn.V3.JwtClaimToHeader.PathSegment,
+    json_name: "claimPath"
 end

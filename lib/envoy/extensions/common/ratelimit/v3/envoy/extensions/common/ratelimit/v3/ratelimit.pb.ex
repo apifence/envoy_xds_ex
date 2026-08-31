@@ -115,6 +115,7 @@ defmodule Envoy.Extensions.Common.Ratelimit.V3.RateLimitDescriptor do
     type: Envoy.Extensions.Common.Ratelimit.V3.RateLimitDescriptor.RateLimitOverride
 
   field :hits_addend, 3, type: Google.Protobuf.UInt64Value, json_name: "hitsAddend"
+  field :is_negative_hits, 4, type: :bool, json_name: "isNegativeHits"
 end
 
 defmodule Envoy.Extensions.Common.Ratelimit.V3.LocalRateLimitDescriptor do

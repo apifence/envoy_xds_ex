@@ -12,7 +12,7 @@ end
 defmodule Envoy.Extensions.Filters.Http.AwsLambda.V3.Config do
   @moduledoc """
   AWS Lambda filter config
-  [#next-free-field: 7]
+  [#next-free-field: 9]
   [#protodoc-title: AWS Lambda]
   AWS Lambda :ref:`configuration overview <config_http_filters_aws_lambda>`.
   [#extension: envoy.filters.http.aws_lambda]
@@ -35,6 +35,16 @@ defmodule Envoy.Extensions.Filters.Http.AwsLambda.V3.Config do
   field :host_rewrite, 4, type: :string, json_name: "hostRewrite"
   field :credentials_profile, 5, type: :string, json_name: "credentialsProfile"
   field :credentials, 6, type: Envoy.Extensions.Filters.Http.AwsLambda.V3.Credentials
+
+  field :match_excluded_headers, 7,
+    repeated: true,
+    type: Envoy.Type.Matcher.V3.StringMatcher,
+    json_name: "matchExcludedHeaders"
+
+  field :match_included_headers, 8,
+    repeated: true,
+    type: Envoy.Type.Matcher.V3.StringMatcher,
+    json_name: "matchIncludedHeaders"
 end
 
 defmodule Envoy.Extensions.Filters.Http.AwsLambda.V3.Credentials do

@@ -84,6 +84,8 @@ defmodule Envoy.Config.Route.V3.RateLimit.Action.MetaData.Source do
 
   field :DYNAMIC, 0
   field :ROUTE_ENTRY, 1
+  field :CLUSTER_ENTRY, 2
+  field :CLUSTER_LOCALITY_ENTRY, 3
 end
 
 defmodule Envoy.Config.Route.V3.VirtualHost.TypedPerFilterConfigEntry do
@@ -1087,7 +1089,7 @@ end
 defmodule Envoy.Config.Route.V3.RetryPolicy do
   @moduledoc """
   HTTP retry :ref:`architecture overview <arch_overview_http_routing_retry>`.
-  [#next-free-field: 14]
+  [#next-free-field: 15]
   """
 
   use Protobuf,
@@ -1145,6 +1147,8 @@ defmodule Envoy.Config.Route.V3.RetryPolicy do
     repeated: true,
     type: Envoy.Config.Route.V3.HeaderMatcher,
     json_name: "retriableRequestHeaders"
+
+  field :refresh_cluster_on_retry, 14, type: :bool, json_name: "refreshClusterOnRetry"
 end
 
 defmodule Envoy.Config.Route.V3.HedgePolicy do
@@ -1171,7 +1175,7 @@ end
 
 defmodule Envoy.Config.Route.V3.RedirectAction do
   @moduledoc """
-  [#next-free-field: 10]
+  [#next-free-field: 11]
   """
 
   use Protobuf,
@@ -1194,6 +1198,8 @@ defmodule Envoy.Config.Route.V3.RedirectAction do
     type: Envoy.Type.Matcher.V3.RegexMatchAndSubstitute,
     json_name: "regexRewrite",
     oneof: 1
+
+  field :path_rewrite, 10, type: :string, json_name: "pathRewrite", oneof: 1
 
   field :response_code, 3,
     type: Envoy.Config.Route.V3.RedirectAction.RedirectResponseCode,
@@ -1549,9 +1555,33 @@ defmodule Envoy.Config.Route.V3.RateLimit.Action.QueryParameterValueMatch do
     deprecated: false
 end
 
+defmodule Envoy.Config.Route.V3.RateLimit.Action.RemoteAddressMatch do
+  @moduledoc """
+  The following descriptor entry is appended to the descriptor:
+
+  .. code-block:: cpp
+
+    ("remote_address_match", "<descriptor_value>")
+  """
+
+  use Protobuf,
+    full_name: "envoy.config.route.v3.RateLimit.Action.RemoteAddressMatch",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :descriptor_value, 1, type: :string, json_name: "descriptorValue", deprecated: false
+  field :descriptor_key, 2, type: :string, json_name: "descriptorKey"
+  field :default_value, 3, type: :string, json_name: "defaultValue"
+
+  field :address_matcher, 4,
+    type: Envoy.Type.Matcher.V3.AddressMatcher,
+    json_name: "addressMatcher",
+    deprecated: false
+end
+
 defmodule Envoy.Config.Route.V3.RateLimit.Action do
   @moduledoc """
-  [#next-free-field: 13]
+  [#next-free-field: 14]
   """
 
   use Protobuf,
@@ -1614,6 +1644,11 @@ defmodule Envoy.Config.Route.V3.RateLimit.Action do
     type: Envoy.Config.Route.V3.RateLimit.Action.QueryParameterValueMatch,
     json_name: "queryParameterValueMatch",
     oneof: 0
+
+  field :remote_address_match, 13,
+    type: Envoy.Config.Route.V3.RateLimit.Action.RemoteAddressMatch,
+    json_name: "remoteAddressMatch",
+    oneof: 0
 end
 
 defmodule Envoy.Config.Route.V3.RateLimit.Override.DynamicMetadata do
@@ -1632,6 +1667,20 @@ defmodule Envoy.Config.Route.V3.RateLimit.Override.DynamicMetadata do
     deprecated: false
 end
 
+defmodule Envoy.Config.Route.V3.RateLimit.Override.RateLimitOverride do
+  @moduledoc """
+  Rate limit to apply to this descriptor.
+  """
+
+  use Protobuf,
+    full_name: "envoy.config.route.v3.RateLimit.Override.RateLimitOverride",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :requests_per_unit, 1, type: :uint32, json_name: "requestsPerUnit"
+  field :unit, 2, type: Envoy.Type.V3.RateLimitUnit, enum: true
+end
+
 defmodule Envoy.Config.Route.V3.RateLimit.Override do
   use Protobuf,
     full_name: "envoy.config.route.v3.RateLimit.Override",
@@ -1644,6 +1693,11 @@ defmodule Envoy.Config.Route.V3.RateLimit.Override do
     type: Envoy.Config.Route.V3.RateLimit.Override.DynamicMetadata,
     json_name: "dynamicMetadata",
     oneof: 0
+
+  field :rate_limit, 2,
+    type: Envoy.Config.Route.V3.RateLimit.Override.RateLimitOverride,
+    json_name: "rateLimit",
+    oneof: 0
 end
 
 defmodule Envoy.Config.Route.V3.RateLimit.HitsAddend do
@@ -1654,6 +1708,7 @@ defmodule Envoy.Config.Route.V3.RateLimit.HitsAddend do
 
   field :number, 1, type: Google.Protobuf.UInt64Value, deprecated: false
   field :format, 2, type: :string, deprecated: false
+  field :is_negative_hits, 3, type: :bool, json_name: "isNegativeHits"
 end
 
 defmodule Envoy.Config.Route.V3.RateLimit do

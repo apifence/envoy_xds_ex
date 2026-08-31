@@ -16,6 +16,10 @@ defmodule Envoy.Extensions.Filters.Http.StatefulSession.V3.StatefulSession do
 
   field :strict, 2, type: :bool
   field :stat_prefix, 3, type: :string, json_name: "statPrefix"
+
+  field :status_on_strict_destination_not_found, 4,
+    type: :uint32,
+    json_name: "statusOnStrictDestinationNotFound"
 end
 
 defmodule Envoy.Extensions.Filters.Http.StatefulSession.V3.StatefulSessionPerRoute do

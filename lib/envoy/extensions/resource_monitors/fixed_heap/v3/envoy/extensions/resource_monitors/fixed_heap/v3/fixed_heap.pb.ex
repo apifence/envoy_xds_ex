@@ -12,5 +12,9 @@ defmodule Envoy.Extensions.ResourceMonitors.FixedHeap.V3.FixedHeapConfig do
     protoc_gen_elixir_version: "0.17.0",
     syntax: :proto3
 
-  field :max_heap_size_bytes, 1, type: :uint64, json_name: "maxHeapSizeBytes", deprecated: false
+  field :max_heap_size_bytes, 1, type: :uint64, json_name: "maxHeapSizeBytes"
+
+  field :max_heap_size_bytes_runtime, 2,
+    type: Envoy.Config.Core.V3.RuntimeUInt64,
+    json_name: "maxHeapSizeBytesRuntime"
 end

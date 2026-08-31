@@ -28,6 +28,7 @@ defmodule Envoy.Data.Core.V3.HealthCheckerType do
   field :GRPC, 2
   field :REDIS, 3
   field :THRIFT, 4
+  field :DYNAMIC_MODULE, 5
 end
 
 defmodule Envoy.Data.Core.V3.HealthCheckEvent do
@@ -97,6 +98,8 @@ defmodule Envoy.Data.Core.V3.HealthCheckEjectUnhealthy do
     json_name: "failureType",
     enum: true,
     deprecated: false
+
+  field :http_status_code, 2, type: :uint32, json_name: "httpStatusCode"
 end
 
 defmodule Envoy.Data.Core.V3.HealthCheckAddHealthy do
@@ -128,6 +131,7 @@ defmodule Envoy.Data.Core.V3.HealthCheckFailure do
     deprecated: false
 
   field :first_check, 2, type: :bool, json_name: "firstCheck"
+  field :http_status_code, 3, type: :uint32, json_name: "httpStatusCode"
 end
 
 defmodule Envoy.Data.Core.V3.DegradedHealthyHost do

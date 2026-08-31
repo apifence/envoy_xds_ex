@@ -13,7 +13,7 @@ end
 
 defmodule Envoy.Extensions.Filters.Http.Fault.V3.FaultAbort do
   @moduledoc """
-  [#next-free-field: 6]
+  [#next-free-field: 7]
   [#protodoc-title: Fault Injection]
   Fault Injection :ref:`configuration overview <config_http_filters_fault_injection>`.
   [#extension: envoy.filters.http.fault]
@@ -35,6 +35,7 @@ defmodule Envoy.Extensions.Filters.Http.Fault.V3.FaultAbort do
     oneof: 0
 
   field :percentage, 3, type: Envoy.Type.V3.FractionalPercent
+  field :response_body, 6, type: :string, json_name: "responseBody"
 end
 
 defmodule Envoy.Extensions.Filters.Http.Fault.V3.HTTPFault do

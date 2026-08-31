@@ -2,7 +2,7 @@ defmodule Envoy.Config.Cluster.V3.OutlierDetection do
   @moduledoc """
   See the :ref:`architecture overview <arch_overview_outlier_detection>` for
   more information on outlier detection.
-  [#next-free-field: 26]
+  [#next-free-field: 27]
   [#protodoc-title: Outlier detection]
   """
 
@@ -114,4 +114,8 @@ defmodule Envoy.Config.Cluster.V3.OutlierDetection do
   field :always_eject_one_host, 25,
     type: Google.Protobuf.BoolValue,
     json_name: "alwaysEjectOneHost"
+
+  field :detect_degraded_hosts, 26,
+    type: Google.Protobuf.BoolValue,
+    json_name: "detectDegradedHosts"
 end

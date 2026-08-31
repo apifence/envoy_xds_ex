@@ -11,7 +11,7 @@ end
 
 defmodule Envoy.Extensions.Filters.Http.Lua.V3.Lua do
   @moduledoc """
-  [#next-free-field: 6]
+  [#next-free-field: 7]
   [#protodoc-title: Lua]
   Lua :ref:`configuration overview <config_http_filters_lua>`.
   [#extension: envoy.filters.http.lua]
@@ -36,6 +36,7 @@ defmodule Envoy.Extensions.Filters.Http.Lua.V3.Lua do
 
   field :stat_prefix, 4, type: :string, json_name: "statPrefix"
   field :clear_route_cache, 5, type: Google.Protobuf.BoolValue, json_name: "clearRouteCache"
+  field :filter_context, 6, type: Google.Protobuf.Struct, json_name: "filterContext"
 end
 
 defmodule Envoy.Extensions.Filters.Http.Lua.V3.LuaPerRoute do

@@ -35,7 +35,8 @@ defmodule Envoy.Extensions.TransportSockets.Tls.V3.UpstreamTlsContext do
 
   field :enforce_rsa_key_usage, 5,
     type: Google.Protobuf.BoolValue,
-    json_name: "enforceRsaKeyUsage"
+    json_name: "enforceRsaKeyUsage",
+    deprecated: true
 end
 
 defmodule Envoy.Extensions.TransportSockets.Tls.V3.DownstreamTlsContext do

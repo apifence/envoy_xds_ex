@@ -29,7 +29,9 @@ end
 
 defmodule Envoy.Extensions.Clusters.DynamicForwardProxy.V3.SubClustersConfig do
   @moduledoc """
-  Configuration for sub clusters. Hard code STRICT_DNS cluster type now.
+  Configuration for sub clusters. Sub clusters default to the ``STRICT_DNS`` discovery type, or
+  use the ``DnsCluster`` extension when ``dns_cluster_config`` is set.
+  [#next-free-field: 6]
   """
 
   use Protobuf,
@@ -57,4 +59,8 @@ defmodule Envoy.Extensions.Clusters.DynamicForwardProxy.V3.SubClustersConfig do
     repeated: true,
     type: Envoy.Config.Core.V3.SocketAddress,
     json_name: "preresolveClusters"
+
+  field :dns_cluster_config, 5,
+    type: Envoy.Extensions.Clusters.Dns.V3.DnsCluster,
+    json_name: "dnsClusterConfig"
 end

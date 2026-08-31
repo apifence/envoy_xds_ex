@@ -51,7 +51,7 @@ end
 
 defmodule Envoy.Extensions.Filters.Http.Ratelimit.V3.RateLimit do
   @moduledoc """
-  [#next-free-field: 18]
+  [#next-free-field: 20]
   [#protodoc-title: Rate limit]
   Rate limit :ref:`configuration overview <config_http_filters_rate_limit>`.
   [#extension: envoy.filters.http.ratelimit]
@@ -114,6 +114,9 @@ defmodule Envoy.Extensions.Filters.Http.Ratelimit.V3.RateLimit do
     repeated: true,
     type: Envoy.Config.Route.V3.RateLimit,
     json_name: "rateLimits"
+
+  field :metadata_namespace, 18, type: :string, json_name: "metadataNamespace"
+  field :enable_retry_after_header, 19, type: :bool, json_name: "enableRetryAfterHeader"
 end
 
 defmodule Envoy.Extensions.Filters.Http.Ratelimit.V3.RateLimitPerRoute do

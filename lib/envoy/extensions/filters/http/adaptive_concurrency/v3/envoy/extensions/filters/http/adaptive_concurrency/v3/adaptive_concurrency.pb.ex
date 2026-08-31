@@ -19,6 +19,11 @@ defmodule Envoy.Extensions.Filters.Http.AdaptiveConcurrency.V3.GradientControlle
     type: Google.Protobuf.Duration,
     json_name: "concurrencyUpdateInterval",
     deprecated: false
+
+  field :min_concurrency_limit, 4,
+    type: Google.Protobuf.UInt32Value,
+    json_name: "minConcurrencyLimit",
+    deprecated: false
 end
 
 defmodule Envoy.Extensions.Filters.Http.AdaptiveConcurrency.V3.GradientControllerConfig.MinimumRTTCalculationParams do

@@ -1,3 +1,18 @@
+defmodule Envoy.Extensions.Filters.Network.RedisProxy.V3.RedisProxy.ProtocolVersion do
+  @moduledoc """
+  RESP protocol version supported on this listener.
+  """
+
+  use Protobuf,
+    enum: true,
+    full_name: "envoy.extensions.filters.network.redis_proxy.v3.RedisProxy.ProtocolVersion",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :RESP2, 0
+  field :RESP3, 1
+end
+
 defmodule Envoy.Extensions.Filters.Network.RedisProxy.V3.RedisProxy.ConnPoolSettings.ReadPolicy do
   @moduledoc """
   ReadPolicy controls how Envoy routes read commands to Redis nodes. This is currently
@@ -18,6 +33,8 @@ defmodule Envoy.Extensions.Filters.Network.RedisProxy.V3.RedisProxy.ConnPoolSett
   field :REPLICA, 2
   field :PREFER_REPLICA, 3
   field :ANY, 4
+  field :LOCAL_ZONE_AFFINITY, 5
+  field :LOCAL_ZONE_AFFINITY_REPLICAS_AND_PRIMARY, 6
 end
 
 defmodule Envoy.Extensions.Filters.Network.RedisProxy.V3.RedisProxy.RedisFault.RedisFaultType do
@@ -197,7 +214,7 @@ end
 
 defmodule Envoy.Extensions.Filters.Network.RedisProxy.V3.RedisProxy do
   @moduledoc """
-  [#next-free-field: 12]
+  [#next-free-field: 13]
   [#protodoc-title: Redis Proxy]
   Redis Proxy :ref:`configuration overview <config_network_filters_redis_proxy>`.
   [#extension: envoy.filters.network.redis_proxy]
@@ -245,6 +262,12 @@ defmodule Envoy.Extensions.Filters.Network.RedisProxy.V3.RedisProxy do
     json_name: "externalAuthProvider"
 
   field :custom_commands, 11, repeated: true, type: :string, json_name: "customCommands"
+
+  field :protocol_version, 12,
+    type: Envoy.Extensions.Filters.Network.RedisProxy.V3.RedisProxy.ProtocolVersion,
+    json_name: "protocolVersion",
+    enum: true,
+    deprecated: false
 end
 
 defmodule Envoy.Extensions.Filters.Network.RedisProxy.V3.RedisProtocolOptions.Credential do

@@ -17,7 +17,7 @@ end
 
 defmodule Envoy.Extensions.Clusters.Dns.V3.DnsCluster do
   @moduledoc """
-  [#next-free-field: 10]
+  [#next-free-field: 11]
   [#protodoc-title: DNS cluster configuration]
   Configuration for DNS discovery clusters.
   [#extension: envoy.clusters.dns]
@@ -52,4 +52,9 @@ defmodule Envoy.Extensions.Clusters.Dns.V3.DnsCluster do
   field :all_addresses_in_single_endpoint, 9,
     type: :bool,
     json_name: "allAddressesInSingleEndpoint"
+
+  field :dns_min_refresh_rate, 10,
+    type: Google.Protobuf.Duration,
+    json_name: "dnsMinRefreshRate",
+    deprecated: false
 end

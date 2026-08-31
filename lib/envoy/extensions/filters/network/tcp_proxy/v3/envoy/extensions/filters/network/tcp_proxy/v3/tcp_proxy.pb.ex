@@ -17,6 +17,23 @@ defmodule Envoy.Extensions.Filters.Network.TcpProxy.V3.UpstreamConnectMode do
   field :ON_DOWNSTREAM_TLS_HANDSHAKE, 2
 end
 
+defmodule Envoy.Extensions.Filters.Network.TcpProxy.V3.ProxyProtocolTlvMergePolicy do
+  @moduledoc """
+  Specifies how TLVs in ``proxy_protocol_tlvs`` are merged with existing PROXY protocol state
+  (e.g., downstream TLVs parsed by the proxy_protocol listener filter).
+  """
+
+  use Protobuf,
+    enum: true,
+    full_name: "envoy.extensions.filters.network.tcp_proxy.v3.ProxyProtocolTlvMergePolicy",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :ADD_IF_ABSENT, 0
+  field :OVERWRITE_BY_TYPE_IF_EXISTS_OR_ADD, 1
+  field :APPEND_IF_EXISTS_OR_ADD, 2
+end
+
 defmodule Envoy.Extensions.Filters.Network.TcpProxy.V3.TcpProxy.WeightedCluster.ClusterWeight do
   use Protobuf,
     full_name:
@@ -51,7 +68,7 @@ defmodule Envoy.Extensions.Filters.Network.TcpProxy.V3.TcpProxy.TunnelingConfig 
   Configuration for tunneling TCP over other transports or application layers.
   Tunneling is supported over HTTP/1.1 and HTTP/2. The upstream protocol is
   determined by the cluster configuration.
-  [#next-free-field: 10]
+  [#next-free-field: 11]
   """
 
   use Protobuf,
@@ -78,6 +95,7 @@ defmodule Envoy.Extensions.Filters.Network.TcpProxy.V3.TcpProxy.TunnelingConfig 
 
   field :request_id_header, 8, type: :string, json_name: "requestIdHeader"
   field :request_id_metadata_key, 9, type: :string, json_name: "requestIdMetadataKey"
+  field :formatters, 10, repeated: true, type: Envoy.Config.Core.V3.TypedExtensionConfig
 end
 
 defmodule Envoy.Extensions.Filters.Network.TcpProxy.V3.TcpProxy.OnDemand do
@@ -108,7 +126,7 @@ end
 
 defmodule Envoy.Extensions.Filters.Network.TcpProxy.V3.TcpProxy do
   @moduledoc """
-  [#next-free-field: 23]
+  [#next-free-field: 25]
   """
 
   use Protobuf,
@@ -193,6 +211,12 @@ defmodule Envoy.Extensions.Filters.Network.TcpProxy.V3.TcpProxy do
     type: Envoy.Config.Core.V3.TlvEntry,
     json_name: "proxyProtocolTlvs"
 
+  field :proxy_protocol_tlv_merge_policy, 23,
+    type: Envoy.Extensions.Filters.Network.TcpProxy.V3.ProxyProtocolTlvMergePolicy,
+    json_name: "proxyProtocolTlvMergePolicy",
+    enum: true,
+    deprecated: false
+
   field :upstream_connect_mode, 21,
     type: Envoy.Extensions.Filters.Network.TcpProxy.V3.UpstreamConnectMode,
     json_name: "upstreamConnectMode",
@@ -203,4 +227,6 @@ defmodule Envoy.Extensions.Filters.Network.TcpProxy.V3.TcpProxy do
     type: Google.Protobuf.UInt32Value,
     json_name: "maxEarlyDataBytes",
     deprecated: false
+
+  field :check_drain_close, 24, type: Google.Protobuf.BoolValue, json_name: "checkDrainClose"
 end

@@ -27,7 +27,7 @@ defmodule Envoy.Extensions.Filters.Network.ExtProc.V3.NetworkExternalProcessor d
 
   By using the filter's processing mode, you can selectively choose which data
   directions to process (read, write or both), allowing for efficient processing.
-  [#next-free-field: 7]
+  [#next-free-field: 8]
   [#protodoc-title: External Processing Filter]
   External Processing Filter: Process network traffic using an external service.
   [#extension: envoy.filters.network.ext_proc]
@@ -55,6 +55,11 @@ defmodule Envoy.Extensions.Filters.Network.ExtProc.V3.NetworkExternalProcessor d
   field :metadata_options, 6,
     type: Envoy.Extensions.Filters.Network.ExtProc.V3.MetadataOptions,
     json_name: "metadataOptions"
+
+  field :connection_attributes, 7,
+    repeated: true,
+    type: :string,
+    json_name: "connectionAttributes"
 end
 
 defmodule Envoy.Extensions.Filters.Network.ExtProc.V3.ProcessingMode do
@@ -103,4 +108,8 @@ defmodule Envoy.Extensions.Filters.Network.ExtProc.V3.MetadataOptions do
   field :forwarding_namespaces, 1,
     type: Envoy.Extensions.Filters.Network.ExtProc.V3.MetadataOptions.MetadataNamespaces,
     json_name: "forwardingNamespaces"
+
+  field :receiving_namespaces, 2,
+    type: Envoy.Extensions.Filters.Network.ExtProc.V3.MetadataOptions.MetadataNamespaces,
+    json_name: "receivingNamespaces"
 end

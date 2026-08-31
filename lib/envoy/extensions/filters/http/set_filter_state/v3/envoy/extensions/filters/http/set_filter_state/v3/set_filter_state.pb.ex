@@ -18,4 +18,6 @@ defmodule Envoy.Extensions.Filters.Http.SetFilterState.V3.Config do
     repeated: true,
     type: Envoy.Extensions.Filters.Common.SetFilterState.V3.FilterStateValue,
     json_name: "onRequestHeaders"
+
+  field :clear_route_cache, 2, type: :bool, json_name: "clearRouteCache"
 end

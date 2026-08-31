@@ -2,7 +2,7 @@ defmodule Envoy.Extensions.GeoipProviders.Common.V3.CommonGeoipProviderConfig.Ge
   @moduledoc """
   The set of geolocation headers to add to request. If any of the configured headers is present
   in the incoming request, it will be overridden by the :ref:`HTTP GeoIP filter <config_http_filters_geoip>`.
-  [#next-free-field: 13]
+  [#next-free-field: 14]
 
   .. attention::
     This field is deprecated in favor of :ref:`geo_field_keys
@@ -19,6 +19,7 @@ defmodule Envoy.Extensions.GeoipProviders.Common.V3.CommonGeoipProviderConfig.Ge
   field :city, 2, type: :string, deprecated: false
   field :region, 3, type: :string, deprecated: false
   field :asn, 4, type: :string, deprecated: false
+  field :asn_org, 13, type: :string, json_name: "asnOrg", deprecated: false
   field :is_anon, 5, type: :string, json_name: "isAnon", deprecated: true
   field :anon, 12, type: :string, deprecated: false
   field :anon_vpn, 6, type: :string, json_name: "anonVpn", deprecated: false
@@ -39,7 +40,7 @@ defmodule Envoy.Extensions.GeoipProviders.Common.V3.CommonGeoipProviderConfig.Ge
   - The :ref:`Network GeoIP filter <config_network_filters_geoip>` stores results in the
     connection's filter state under the well-known key ``envoy.geoip``.
 
-  [#next-free-field: 12]
+  [#next-free-field: 13]
   """
 
   use Protobuf,
@@ -52,6 +53,7 @@ defmodule Envoy.Extensions.GeoipProviders.Common.V3.CommonGeoipProviderConfig.Ge
   field :city, 2, type: :string
   field :region, 3, type: :string
   field :asn, 4, type: :string
+  field :asn_org, 12, type: :string, json_name: "asnOrg"
   field :anon, 5, type: :string
   field :anon_vpn, 6, type: :string, json_name: "anonVpn"
   field :anon_hosting, 7, type: :string, json_name: "anonHosting"

@@ -55,6 +55,8 @@ defmodule Envoy.Service.Health.V3.EndpointHealth do
     type: Envoy.Config.Core.V3.HealthStatus,
     json_name: "healthStatus",
     enum: true
+
+  field :health_metadata, 3, type: Google.Protobuf.Struct, json_name: "healthMetadata"
 end
 
 defmodule Envoy.Service.Health.V3.LocalityEndpointsHealth do

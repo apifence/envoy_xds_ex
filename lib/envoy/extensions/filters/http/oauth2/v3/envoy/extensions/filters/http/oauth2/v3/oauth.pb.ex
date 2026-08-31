@@ -11,6 +11,25 @@ defmodule Envoy.Extensions.Filters.Http.Oauth2.V3.CookieConfig.SameSite do
   field :NONE, 3
 end
 
+defmodule Envoy.Extensions.Filters.Http.Oauth2.V3.PrivateKeyJwtConfig.SigningAlgorithm do
+  @moduledoc """
+  Supported JWT signing algorithms for the client assertion.
+  """
+
+  use Protobuf,
+    enum: true,
+    full_name: "envoy.extensions.filters.http.oauth2.v3.PrivateKeyJwtConfig.SigningAlgorithm",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :RS256, 0
+  field :RS384, 1
+  field :RS512, 2
+  field :ES256, 3
+  field :ES384, 4
+  field :ES512, 5
+end
+
 defmodule Envoy.Extensions.Filters.Http.Oauth2.V3.OAuth2Config.AuthType do
   use Protobuf,
     enum: true,
@@ -20,6 +39,8 @@ defmodule Envoy.Extensions.Filters.Http.Oauth2.V3.OAuth2Config.AuthType do
 
   field :URL_ENCODED_BODY, 0
   field :BASIC_AUTH, 1
+  field :TLS_CLIENT_AUTH, 2
+  field :PRIVATE_KEY_JWT, 3
 end
 
 defmodule Envoy.Extensions.Filters.Http.Oauth2.V3.CookieConfig do
@@ -119,8 +140,7 @@ defmodule Envoy.Extensions.Filters.Http.Oauth2.V3.OAuth2Credentials do
 
   field :token_secret, 2,
     type: Envoy.Extensions.TransportSockets.Tls.V3.SdsSecretConfig,
-    json_name: "tokenSecret",
-    deprecated: false
+    json_name: "tokenSecret"
 
   field :hmac_secret, 3,
     type: Envoy.Extensions.TransportSockets.Tls.V3.SdsSecretConfig,
@@ -135,11 +155,66 @@ defmodule Envoy.Extensions.Filters.Http.Oauth2.V3.OAuth2Credentials do
   field :cookie_domain, 5, type: :string, json_name: "cookieDomain", deprecated: false
 end
 
+defmodule Envoy.Extensions.Filters.Http.Oauth2.V3.PrivateKeyJwtConfig do
+  @moduledoc """
+  Configuration for ``PRIVATE_KEY_JWT`` client authentication (RFC 7523).
+  """
+
+  use Protobuf,
+    full_name: "envoy.extensions.filters.http.oauth2.v3.PrivateKeyJwtConfig",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :signing_algorithm, 1,
+    type: Envoy.Extensions.Filters.Http.Oauth2.V3.PrivateKeyJwtConfig.SigningAlgorithm,
+    json_name: "signingAlgorithm",
+    enum: true,
+    deprecated: false
+
+  field :assertion_lifetime, 2,
+    type: Google.Protobuf.Duration,
+    json_name: "assertionLifetime",
+    deprecated: false
+
+  field :assertion_audience, 3, type: :string, json_name: "assertionAudience"
+end
+
+defmodule Envoy.Extensions.Filters.Http.Oauth2.V3.OAuth2TokenForwarding do
+  @moduledoc """
+  Defines how an OAuth token is forwarded upstream.
+  """
+
+  use Protobuf,
+    full_name: "envoy.extensions.filters.http.oauth2.v3.OAuth2TokenForwarding",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :header, 1, type: :string, deprecated: false
+end
+
+defmodule Envoy.Extensions.Filters.Http.Oauth2.V3.PostLogoutRedirectUri do
+  @moduledoc """
+  Configuration for the ``post_logout_redirect_uri`` parameter used in OpenID Connect
+  `RP-Initiated Logout requests <https://openid.net/specs/openid-connect-rpinitiated-1_0.html>`_.
+  This configuration is ignored if ``end_session_endpoint`` is not set.
+  """
+
+  use Protobuf,
+    full_name: "envoy.extensions.filters.http.oauth2.v3.PostLogoutRedirectUri",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  oneof :config, 0
+
+  field :disabled, 1, type: :bool, oneof: 0, deprecated: false
+  field :uri, 2, type: :string, oneof: 0, deprecated: false
+end
+
 defmodule Envoy.Extensions.Filters.Http.Oauth2.V3.OAuth2Config do
   @moduledoc """
   OAuth config
 
-  [#next-free-field: 27]
+  [#next-free-field: 34]
   """
 
   use Protobuf,
@@ -156,6 +231,10 @@ defmodule Envoy.Extensions.Filters.Http.Oauth2.V3.OAuth2Config do
     deprecated: false
 
   field :end_session_endpoint, 23, type: :string, json_name: "endSessionEndpoint"
+
+  field :post_logout_redirect_uri, 33,
+    type: Envoy.Extensions.Filters.Http.Oauth2.V3.PostLogoutRedirectUri,
+    json_name: "postLogoutRedirectUri"
 
   field :credentials, 3,
     type: Envoy.Extensions.Filters.Http.Oauth2.V3.OAuth2Credentials,
@@ -174,6 +253,11 @@ defmodule Envoy.Extensions.Filters.Http.Oauth2.V3.OAuth2Config do
     deprecated: false
 
   field :forward_bearer_token, 7, type: :bool, json_name: "forwardBearerToken"
+
+  field :forward_id_token, 31,
+    type: Envoy.Extensions.Filters.Http.Oauth2.V3.OAuth2TokenForwarding,
+    json_name: "forwardIdToken"
+
   field :preserve_authorization_header, 16, type: :bool, json_name: "preserveAuthorizationHeader"
 
   field :pass_through_matcher, 8,
@@ -227,6 +311,43 @@ defmodule Envoy.Extensions.Filters.Http.Oauth2.V3.OAuth2Config do
     json_name: "codeVerifierTokenExpiresIn"
 
   field :disable_token_encryption, 26, type: :bool, json_name: "disableTokenEncryption"
+
+  field :allow_failed_matcher, 27,
+    repeated: true,
+    type: Envoy.Config.Route.V3.HeaderMatcher,
+    json_name: "allowFailedMatcher"
+
+  field :original_request_uri, 28, type: :string, json_name: "originalRequestUri"
+
+  field :allowed_redirect_domains, 29,
+    repeated: true,
+    type: :string,
+    json_name: "allowedRedirectDomains"
+
+  field :use_access_token_expiry_for_id_token_cookie, 30,
+    type: :bool,
+    json_name: "useAccessTokenExpiryForIdTokenCookie"
+
+  field :private_key_jwt_config, 32,
+    type: Envoy.Extensions.Filters.Http.Oauth2.V3.PrivateKeyJwtConfig,
+    json_name: "privateKeyJwtConfig"
+end
+
+defmodule Envoy.Extensions.Filters.Http.Oauth2.V3.OAuth2PerRoute do
+  @moduledoc """
+  Per-route OAuth2 config.
+
+  This message supplies an OAuth2Config for the matched route.
+  It overrides the filter-level config for requests matching the route.
+  If neither the global config nor a per-route config is specified, OAuth2 is disabled for the route.
+  """
+
+  use Protobuf,
+    full_name: "envoy.extensions.filters.http.oauth2.v3.OAuth2PerRoute",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :config, 1, type: Envoy.Extensions.Filters.Http.Oauth2.V3.OAuth2Config, deprecated: false
 end
 
 defmodule Envoy.Extensions.Filters.Http.Oauth2.V3.OAuth2 do

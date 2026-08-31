@@ -27,6 +27,29 @@ defmodule Envoy.Extensions.Filters.Http.GcpAuthn.V3.GcpAuthnFilterConfig do
   field :timeout, 6, type: Google.Protobuf.Duration, deprecated: false
 end
 
+defmodule Envoy.Extensions.Filters.Http.GcpAuthn.V3.Audience.AccessToken do
+  use Protobuf,
+    full_name: "envoy.extensions.filters.http.gcp_authn.v3.Audience.AccessToken",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+end
+
+defmodule Envoy.Extensions.Filters.Http.GcpAuthn.V3.Audience.BoundJwt do
+  use Protobuf,
+    full_name: "envoy.extensions.filters.http.gcp_authn.v3.Audience.BoundJwt",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :url, 1, type: :string, deprecated: false
+end
+
+defmodule Envoy.Extensions.Filters.Http.GcpAuthn.V3.Audience.BoundAccessToken do
+  use Protobuf,
+    full_name: "envoy.extensions.filters.http.gcp_authn.v3.Audience.BoundAccessToken",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+end
+
 defmodule Envoy.Extensions.Filters.Http.GcpAuthn.V3.Audience do
   @moduledoc """
   Audience is the URL of the receiving service that performs token authentication.
@@ -38,7 +61,19 @@ defmodule Envoy.Extensions.Filters.Http.GcpAuthn.V3.Audience do
     protoc_gen_elixir_version: "0.17.0",
     syntax: :proto3
 
-  field :url, 1, type: :string, deprecated: false
+  field :url, 1, type: :string
+
+  field :access_token, 2,
+    type: Envoy.Extensions.Filters.Http.GcpAuthn.V3.Audience.AccessToken,
+    json_name: "accessToken"
+
+  field :bound_jwt, 3,
+    type: Envoy.Extensions.Filters.Http.GcpAuthn.V3.Audience.BoundJwt,
+    json_name: "boundJwt"
+
+  field :bound_access_token, 4,
+    type: Envoy.Extensions.Filters.Http.GcpAuthn.V3.Audience.BoundAccessToken,
+    json_name: "boundAccessToken"
 end
 
 defmodule Envoy.Extensions.Filters.Http.GcpAuthn.V3.TokenCacheConfig do

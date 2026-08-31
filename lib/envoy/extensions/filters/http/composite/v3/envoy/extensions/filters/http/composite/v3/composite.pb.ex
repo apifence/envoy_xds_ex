@@ -36,6 +36,21 @@ defmodule Envoy.Extensions.Filters.Http.Composite.V3.Composite do
     type: Envoy.Extensions.Filters.Http.Composite.V3.Composite.NamedFilterChainsEntry,
     json_name: "namedFilterChains",
     map: true
+
+  field :matcher, 2, type: Xds.Type.Matcher.V3.Matcher
+end
+
+defmodule Envoy.Extensions.Filters.Http.Composite.V3.CompositePerRoute do
+  @moduledoc """
+  Per-route configuration for the Composite filter.
+  """
+
+  use Protobuf,
+    full_name: "envoy.extensions.filters.http.composite.v3.CompositePerRoute",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :matcher, 1, type: Xds.Type.Matcher.V3.Matcher, deprecated: false
 end
 
 defmodule Envoy.Extensions.Filters.Http.Composite.V3.FilterChainConfiguration do

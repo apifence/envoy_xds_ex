@@ -64,6 +64,7 @@ end
 defmodule Envoy.Extensions.Filters.Udp.DnsFilter.V3.DnsFilterConfig do
   @moduledoc """
   Configuration for the DNS filter.
+  [#next-free-field: 6]
   [#protodoc-title: DNS Filter]
   DNS Filter :ref:`configuration overview <config_udp_listener_filters_dns_filter>`.
   [#extension: envoy.filters.udp.dns_filter]
@@ -88,4 +89,6 @@ defmodule Envoy.Extensions.Filters.Udp.DnsFilter.V3.DnsFilterConfig do
     repeated: true,
     type: Envoy.Config.Accesslog.V3.AccessLog,
     json_name: "accessLog"
+
+  field :case_insensitive, 5, type: :bool, json_name: "caseInsensitive"
 end

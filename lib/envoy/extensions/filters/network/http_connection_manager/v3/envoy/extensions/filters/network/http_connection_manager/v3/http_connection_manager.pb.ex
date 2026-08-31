@@ -65,6 +65,23 @@ defmodule Envoy.Extensions.Filters.Network.HttpConnectionManager.V3.HttpConnecti
   field :UNESCAPE_AND_FORWARD, 4
 end
 
+defmodule Envoy.Extensions.Filters.Network.HttpConnectionManager.V3.HttpConnectionManager.ForwardClientCertFormat do
+  @moduledoc """
+  The format to use when writing the
+  :ref:`config_http_conn_man_headers_x-forwarded-client-cert` (XFCC) header value.
+  """
+
+  use Protobuf,
+    enum: true,
+    full_name:
+      "envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager.ForwardClientCertFormat",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :TEXT, 0
+  field :JSON, 1
+end
+
 defmodule Envoy.Extensions.Filters.Network.HttpConnectionManager.V3.HttpConnectionManager.Tracing.OperationName do
   @moduledoc """
   This OperationName makes no sense and is unnecessary in the current tracing API.
@@ -84,7 +101,7 @@ end
 
 defmodule Envoy.Extensions.Filters.Network.HttpConnectionManager.V3.HttpConnectionManager.Tracing do
   @moduledoc """
-  [#next-free-field: 13]
+  [#next-free-field: 14]
   """
 
   use Protobuf,
@@ -108,6 +125,7 @@ defmodule Envoy.Extensions.Filters.Network.HttpConnectionManager.V3.HttpConnecti
   field :spawn_upstream_span, 10, type: Google.Protobuf.BoolValue, json_name: "spawnUpstreamSpan"
   field :operation, 11, type: :string
   field :upstream_operation, 12, type: :string, json_name: "upstreamOperation"
+  field :no_context_propagation, 13, type: :bool, json_name: "noContextPropagation"
 end
 
 defmodule Envoy.Extensions.Filters.Network.HttpConnectionManager.V3.HttpConnectionManager.InternalAddressConfig do
@@ -127,7 +145,7 @@ end
 
 defmodule Envoy.Extensions.Filters.Network.HttpConnectionManager.V3.HttpConnectionManager.SetCurrentClientCertDetails do
   @moduledoc """
-  [#next-free-field: 7]
+  [#next-free-field: 9]
   """
 
   use Protobuf,
@@ -141,11 +159,19 @@ defmodule Envoy.Extensions.Filters.Network.HttpConnectionManager.V3.HttpConnecti
   field :chain, 6, type: :bool
   field :dns, 4, type: :bool
   field :uri, 5, type: :bool
+  field :issuer, 8, type: :bool
+
+  field :format, 7,
+    type:
+      Envoy.Extensions.Filters.Network.HttpConnectionManager.V3.HttpConnectionManager.ForwardClientCertFormat,
+    enum: true
 end
 
 defmodule Envoy.Extensions.Filters.Network.HttpConnectionManager.V3.HttpConnectionManager.ForwardClientCertConfig do
   @moduledoc """
-  The configuration for forwarding client cert details.
+  The configuration for forwarding client cert details, used as the action config in a
+  :ref:`forward_client_cert_matcher
+  <envoy_v3_api_field_extensions.filters.network.http_connection_manager.v3.HttpConnectionManager.forward_client_cert_matcher>`.
   """
 
   use Protobuf,
@@ -281,7 +307,7 @@ end
 
 defmodule Envoy.Extensions.Filters.Network.HttpConnectionManager.V3.HttpConnectionManager do
   @moduledoc """
-  [#next-free-field: 62]
+  [#next-free-field: 63]
   [#protodoc-title: HTTP connection manager]
   HTTP connection manager :ref:`configuration overview <config_http_conn_man>`.
   [#extension: envoy.filters.network.http_connection_manager]
@@ -385,6 +411,7 @@ defmodule Envoy.Extensions.Filters.Network.HttpConnectionManager.V3.HttpConnecti
     deprecated: false
 
   field :drain_timeout, 12, type: Google.Protobuf.Duration, json_name: "drainTimeout"
+  field :drain_timeout_jitter, 62, type: Envoy.Type.V3.Percent, json_name: "drainTimeoutJitter"
 
   field :delayed_close_timeout, 26,
     type: Google.Protobuf.Duration,

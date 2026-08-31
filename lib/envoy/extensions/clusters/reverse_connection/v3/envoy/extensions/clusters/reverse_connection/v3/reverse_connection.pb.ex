@@ -16,4 +16,5 @@ defmodule Envoy.Extensions.Clusters.ReverseConnection.V3.ReverseConnectionCluste
     deprecated: false
 
   field :host_id_format, 2, type: :string, json_name: "hostIdFormat", deprecated: false
+  field :tenant_id_format, 3, type: :string, json_name: "tenantIdFormat", deprecated: false
 end

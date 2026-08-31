@@ -8,9 +8,6 @@ defmodule Envoy.Extensions.Quic.ConnectionIdGenerator.QuicLb.V3.Config do
 
   See https://datatracker.ietf.org/doc/html/draft-ietf-quic-load-balancers for details.
 
-  .. warning::
-
-     This is still a work in progress. Interoperability testing has not yet been performed.
   [#next-free-field: 7]
   [#protodoc-title: QUIC-LB connection ID generator config]
   [#extension: envoy.quic.connection_id_generator.quic_lb]

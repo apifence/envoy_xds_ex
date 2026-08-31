@@ -18,6 +18,7 @@ defmodule Envoy.Data.Cluster.V3.OutlierEjectionType do
   field :SUCCESS_RATE_LOCAL_ORIGIN, 4
   field :FAILURE_PERCENTAGE, 5
   field :FAILURE_PERCENTAGE_LOCAL_ORIGIN, 6
+  field :DEGRADED, 7
 end
 
 defmodule Envoy.Data.Cluster.V3.Action do

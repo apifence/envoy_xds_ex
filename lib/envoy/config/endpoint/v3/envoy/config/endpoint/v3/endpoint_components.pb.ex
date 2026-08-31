@@ -26,6 +26,7 @@ end
 defmodule Envoy.Config.Endpoint.V3.Endpoint do
   @moduledoc """
   Upstream host identifier.
+  [#next-free-field: 6]
   [#protodoc-title: Endpoints]
   """
 
@@ -46,6 +47,8 @@ defmodule Envoy.Config.Endpoint.V3.Endpoint do
     repeated: true,
     type: Envoy.Config.Endpoint.V3.Endpoint.AdditionalAddress,
     json_name: "additionalAddresses"
+
+  field :observability_name, 5, type: :string, json_name: "observabilityName"
 end
 
 defmodule Envoy.Config.Endpoint.V3.LbEndpoint do
@@ -88,7 +91,7 @@ defmodule Envoy.Config.Endpoint.V3.LbEndpointCollection do
     protoc_gen_elixir_version: "0.17.0",
     syntax: :proto3
 
-  field :entries, 1, type: Xds.Core.V3.CollectionEntry
+  field :entries, 1, repeated: true, type: Xds.Core.V3.CollectionEntry
 end
 
 defmodule Envoy.Config.Endpoint.V3.LedsClusterLocalityConfig do

@@ -17,6 +17,7 @@ defmodule Envoy.Extensions.TransportSockets.Quic.V3.QuicDownstreamTransport do
     deprecated: false
 
   field :enable_early_data, 2, type: Google.Protobuf.BoolValue, json_name: "enableEarlyData"
+  field :enable_resumption, 3, type: Google.Protobuf.BoolValue, json_name: "enableResumption"
 end
 
 defmodule Envoy.Extensions.TransportSockets.Quic.V3.QuicUpstreamTransport do

@@ -16,4 +16,6 @@ defmodule Envoy.Config.Core.V3.HttpService do
     type: Envoy.Config.Core.V3.HeaderValueOption,
     json_name: "requestHeadersToAdd",
     deprecated: false
+
+  field :formatters, 3, repeated: true, type: Envoy.Config.Core.V3.TypedExtensionConfig
 end

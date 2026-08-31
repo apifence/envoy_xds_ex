@@ -1,6 +1,6 @@
 defmodule Envoy.Extensions.Clusters.Redis.V3.RedisClusterConfig do
   @moduledoc """
-  [#next-free-field: 7]
+  [#next-free-field: 8]
   [#protodoc-title: Redis Cluster Configuration]
   This cluster adds support for `Redis Cluster <https://redis.io/topics/cluster-spec>`_, as part
   of :ref:`Envoy's support for Redis Cluster <arch_overview_redis>`.
@@ -69,4 +69,8 @@ defmodule Envoy.Extensions.Clusters.Redis.V3.RedisClusterConfig do
   field :host_degraded_refresh_threshold, 6,
     type: :uint32,
     json_name: "hostDegradedRefreshThreshold"
+
+  field :enable_zone_discovery, 7,
+    type: Google.Protobuf.BoolValue,
+    json_name: "enableZoneDiscovery"
 end

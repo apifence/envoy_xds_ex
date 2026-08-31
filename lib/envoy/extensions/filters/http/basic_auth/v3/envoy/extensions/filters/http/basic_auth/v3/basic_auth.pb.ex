@@ -10,6 +10,8 @@ defmodule Envoy.Extensions.Filters.Http.BasicAuth.V3.BasicAuth do
       inline_string: |-
         user1:{SHA}hashed_user1_password
         user2:{SHA}hashed_user2_password
+
+  [#next-free-field: 6]
   [#protodoc-title: Basic Auth]
   Basic Auth :ref:`configuration overview <config_http_filters_basic_auth>`.
   [#extension: envoy.filters.http.basic_auth]
@@ -31,6 +33,9 @@ defmodule Envoy.Extensions.Filters.Http.BasicAuth.V3.BasicAuth do
     type: :string,
     json_name: "authenticationHeader",
     deprecated: false
+
+  field :allow_missing, 4, type: :bool, json_name: "allowMissing"
+  field :emit_dynamic_metadata, 5, type: :bool, json_name: "emitDynamicMetadata"
 end
 
 defmodule Envoy.Extensions.Filters.Http.BasicAuth.V3.BasicAuthPerRoute do

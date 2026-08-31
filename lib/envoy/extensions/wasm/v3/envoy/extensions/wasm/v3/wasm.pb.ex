@@ -71,7 +71,7 @@ end
 defmodule Envoy.Extensions.Wasm.V3.VmConfig do
   @moduledoc """
   Configuration for a Wasm VM.
-  [#next-free-field: 8]
+  [#next-free-field: 9]
   """
 
   use Protobuf,
@@ -89,6 +89,10 @@ defmodule Envoy.Extensions.Wasm.V3.VmConfig do
   field :environment_variables, 7,
     type: Envoy.Extensions.Wasm.V3.EnvironmentVariables,
     json_name: "environmentVariables"
+
+  field :capability_restriction_config, 8,
+    type: Envoy.Extensions.Wasm.V3.CapabilityRestrictionConfig,
+    json_name: "capabilityRestrictionConfig"
 end
 
 defmodule Envoy.Extensions.Wasm.V3.EnvironmentVariables.KeyValuesEntry do
@@ -145,7 +149,8 @@ defmodule Envoy.Extensions.Wasm.V3.PluginConfig do
 
   field :capability_restriction_config, 6,
     type: Envoy.Extensions.Wasm.V3.CapabilityRestrictionConfig,
-    json_name: "capabilityRestrictionConfig"
+    json_name: "capabilityRestrictionConfig",
+    deprecated: true
 
   field :allow_on_headers_stop_iteration, 9,
     type: Google.Protobuf.BoolValue,

@@ -11,6 +11,7 @@ defmodule Envoy.Extensions.Filters.Http.Mcp.V3.Mcp.TrafficMode do
 
   field :PASS_THROUGH, 0
   field :REJECT_NO_MCP, 1
+  field :NOOP, 2
 end
 
 defmodule Envoy.Extensions.Filters.Http.Mcp.V3.Mcp.RequestStorageMode do
@@ -30,10 +31,24 @@ defmodule Envoy.Extensions.Filters.Http.Mcp.V3.Mcp.RequestStorageMode do
   field :DYNAMIC_METADATA_AND_FILTER_STATE, 3
 end
 
+defmodule Envoy.Extensions.Filters.Http.Mcp.V3.Mcp.TraceContextPropagationConfig do
+  use Protobuf,
+    full_name: "envoy.extensions.filters.http.mcp.v3.Mcp.TraceContextPropagationConfig",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+end
+
+defmodule Envoy.Extensions.Filters.Http.Mcp.V3.Mcp.BaggagePropagationConfig do
+  use Protobuf,
+    full_name: "envoy.extensions.filters.http.mcp.v3.Mcp.BaggagePropagationConfig",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+end
+
 defmodule Envoy.Extensions.Filters.Http.Mcp.V3.Mcp do
   @moduledoc """
   This filter will inspect and get attributes from MCP traffic.
-  [#next-free-field: 6]
+  [#next-free-field: 9]
   [#protodoc-title: MCP]
   MCP filter :ref:`configuration overview <config_http_filters_mcp>`.
   [#extension: envoy.filters.http.mcp]
@@ -66,6 +81,18 @@ defmodule Envoy.Extensions.Filters.Http.Mcp.V3.Mcp do
     json_name: "requestStorageMode",
     enum: true,
     deprecated: false
+
+  field :propagate_trace_context, 6,
+    type: Envoy.Extensions.Filters.Http.Mcp.V3.Mcp.TraceContextPropagationConfig,
+    json_name: "propagateTraceContext"
+
+  field :propagate_baggage, 7,
+    type: Envoy.Extensions.Filters.Http.Mcp.V3.Mcp.BaggagePropagationConfig,
+    json_name: "propagateBaggage"
+
+  field :reject_duplicate_keys, 8,
+    type: Google.Protobuf.BoolValue,
+    json_name: "rejectDuplicateKeys"
 end
 
 defmodule Envoy.Extensions.Filters.Http.Mcp.V3.ParserConfig.AttributeExtractionRule do
@@ -121,6 +148,7 @@ end
 defmodule Envoy.Extensions.Filters.Http.Mcp.V3.McpOverride do
   @moduledoc """
   Per-route override configuration for MCP filter
+  [#next-free-field: 7]
   """
 
   use Protobuf,
@@ -138,4 +166,18 @@ defmodule Envoy.Extensions.Filters.Http.Mcp.V3.McpOverride do
     type: Google.Protobuf.UInt32Value,
     json_name: "maxRequestBodySize",
     deprecated: false
+
+  field :clear_route_cache, 3, type: :bool, json_name: "clearRouteCache"
+
+  field :parser_config, 4,
+    type: Envoy.Extensions.Filters.Http.Mcp.V3.ParserConfig,
+    json_name: "parserConfig"
+
+  field :request_storage_mode, 5,
+    type: Envoy.Extensions.Filters.Http.Mcp.V3.Mcp.RequestStorageMode,
+    json_name: "requestStorageMode",
+    enum: true,
+    deprecated: false
+
+  field :reject_duplicate_keys, 6, type: :bool, json_name: "rejectDuplicateKeys"
 end

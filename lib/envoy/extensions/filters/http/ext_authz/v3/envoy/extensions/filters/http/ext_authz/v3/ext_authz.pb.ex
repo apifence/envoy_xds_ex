@@ -1,6 +1,23 @@
+defmodule Envoy.Extensions.Filters.Http.ExtAuthz.V3.ShadowDecision.CheckResult do
+  @moduledoc """
+  The decision the auth server returned.
+  """
+
+  use Protobuf,
+    enum: true,
+    full_name: "envoy.extensions.filters.http.ext_authz.v3.ShadowDecision.CheckResult",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :UNSPECIFIED, 0
+  field :OK, 1
+  field :DENIED, 2
+  field :ERROR, 3
+end
+
 defmodule Envoy.Extensions.Filters.Http.ExtAuthz.V3.ExtAuthz do
   @moduledoc """
-  [#next-free-field: 32]
+  [#next-free-field: 33]
   [#protodoc-title: External Authorization]
   External Authorization :ref:`configuration overview <config_http_filters_ext_authz>`.
   [#extension: envoy.filters.http.ext_authz]
@@ -108,6 +125,34 @@ defmodule Envoy.Extensions.Filters.Http.ExtAuthz.V3.ExtAuthz do
     json_name: "maxDeniedResponseBodyBytes"
 
   field :enforce_response_header_limits, 31, type: :bool, json_name: "enforceResponseHeaderLimits"
+  field :shadow_mode, 32, type: :bool, json_name: "shadowMode"
+end
+
+defmodule Envoy.Extensions.Filters.Http.ExtAuthz.V3.ShadowDecision do
+  @moduledoc """
+  Serialized form of the shadow-mode authorization decision written to FilterState
+  when :ref:`shadow_mode
+  <envoy_v3_api_field_extensions.filters.http.ext_authz.v3.ExtAuthz.shadow_mode>` is
+  enabled. Consumed by a downstream filter that decides whether to enforce the
+  decision.
+  """
+
+  use Protobuf,
+    full_name: "envoy.extensions.filters.http.ext_authz.v3.ShadowDecision",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :check_result, 1,
+    type: Envoy.Extensions.Filters.Http.ExtAuthz.V3.ShadowDecision.CheckResult,
+    json_name: "checkResult",
+    enum: true
+
+  field :status_code, 2, type: :uint32, json_name: "statusCode", deprecated: false
+
+  field :response_headers, 3,
+    repeated: true,
+    type: Envoy.Config.Core.V3.HeaderValue,
+    json_name: "responseHeaders"
 end
 
 defmodule Envoy.Extensions.Filters.Http.ExtAuthz.V3.BufferSettings do
@@ -156,7 +201,7 @@ defmodule Envoy.Extensions.Filters.Http.ExtAuthz.V3.HttpService do
   metadata as well as body may be added to the client's response. See :ref:`allowed_client_headers
   <envoy_v3_api_field_extensions.filters.http.ext_authz.v3.AuthorizationResponse.allowed_client_headers>`
   for details.
-  [#next-free-field: 10]
+  [#next-free-field: 11]
   """
 
   use Protobuf,
@@ -166,6 +211,7 @@ defmodule Envoy.Extensions.Filters.Http.ExtAuthz.V3.HttpService do
 
   field :server_uri, 1, type: Envoy.Config.Core.V3.HttpUri, json_name: "serverUri"
   field :path_prefix, 2, type: :string, json_name: "pathPrefix"
+  field :path_override, 10, type: :string, json_name: "pathOverride"
 
   field :authorization_request, 7,
     type: Envoy.Extensions.Filters.Http.ExtAuthz.V3.AuthorizationRequest,

@@ -18,7 +18,7 @@ defmodule Envoy.Extensions.Common.DynamicForwardProxy.V3.DnsCacheConfig do
   @moduledoc """
   Configuration for the dynamic forward proxy DNS cache. See the :ref:`architecture overview
   <arch_overview_http_dynamic_forward_proxy>` for more information.
-  [#next-free-field: 16]
+  [#next-free-field: 17]
   """
 
   use Protobuf,
@@ -83,4 +83,8 @@ defmodule Envoy.Extensions.Common.DynamicForwardProxy.V3.DnsCacheConfig do
   field :key_value_config, 13,
     type: Envoy.Config.Common.KeyValue.V3.KeyValueStoreConfig,
     json_name: "keyValueConfig"
+
+  field :resolved_address_filter, 16,
+    type: Envoy.Type.Matcher.V3.AddressMatcher,
+    json_name: "resolvedAddressFilter"
 end

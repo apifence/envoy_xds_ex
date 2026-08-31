@@ -27,7 +27,7 @@ end
 defmodule Envoy.Extensions.Filters.Http.Compressor.V3.Compressor.ResponseDirectionConfig do
   @moduledoc """
   Configuration for filter behavior on the response direction.
-  [#next-free-field: 6]
+  [#next-free-field: 7]
   """
 
   use Protobuf,
@@ -40,6 +40,7 @@ defmodule Envoy.Extensions.Filters.Http.Compressor.V3.Compressor.ResponseDirecti
     json_name: "commonConfig"
 
   field :disable_on_etag_header, 2, type: :bool, json_name: "disableOnEtagHeader"
+  field :weaken_etag_on_compress, 6, type: :bool, json_name: "weakenEtagOnCompress"
   field :remove_accept_encoding_header, 3, type: :bool, json_name: "removeAcceptEncodingHeader"
 
   field :uncompressible_response_codes, 4,

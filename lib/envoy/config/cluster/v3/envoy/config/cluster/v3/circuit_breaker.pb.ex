@@ -5,6 +5,7 @@ defmodule Envoy.Config.Cluster.V3.CircuitBreakers.Thresholds.RetryBudget do
     syntax: :proto3
 
   field :budget_percent, 1, type: Envoy.Type.V3.Percent, json_name: "budgetPercent"
+  field :budget_interval, 3, type: Google.Protobuf.Duration, json_name: "budgetInterval"
 
   field :min_retry_concurrency, 2,
     type: Google.Protobuf.UInt32Value,

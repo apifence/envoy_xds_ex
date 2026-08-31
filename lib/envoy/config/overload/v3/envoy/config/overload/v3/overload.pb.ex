@@ -105,6 +105,28 @@ defmodule Envoy.Config.Overload.V3.ScaleTimersOverloadActionConfig do
     deprecated: false
 end
 
+defmodule Envoy.Config.Overload.V3.ShrinkHeapConfig do
+  @moduledoc """
+  Typed configuration for the "envoy.overload_actions.shrink_heap" action.
+  See :ref:`the docs <config_overload_manager_shrink_heap>` for an example of how to configure
+  this action.
+  """
+
+  use Protobuf,
+    full_name: "envoy.config.overload.v3.ShrinkHeapConfig",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :timer_interval, 1,
+    type: Google.Protobuf.Duration,
+    json_name: "timerInterval",
+    deprecated: false
+
+  field :max_unfreed_memory_bytes, 2,
+    type: Google.Protobuf.UInt64Value,
+    json_name: "maxUnfreedMemoryBytes"
+end
+
 defmodule Envoy.Config.Overload.V3.OverloadAction do
   use Protobuf,
     full_name: "envoy.config.overload.v3.OverloadAction",

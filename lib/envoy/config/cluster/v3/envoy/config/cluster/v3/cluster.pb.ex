@@ -153,6 +153,10 @@ defmodule Envoy.Config.Cluster.V3.Cluster.RingHashLbConfig.HashFunction do
 end
 
 defmodule Envoy.Config.Cluster.V3.UpstreamConnectionOptions.FirstAddressFamilyVersion do
+  @moduledoc """
+  [#comment: Keep this list of address types in sync with api/config/core/v3/address.proto.]
+  """
+
   use Protobuf,
     enum: true,
     full_name: "envoy.config.cluster.v3.UpstreamConnectionOptions.FirstAddressFamilyVersion",
@@ -162,6 +166,8 @@ defmodule Envoy.Config.Cluster.V3.UpstreamConnectionOptions.FirstAddressFamilyVe
   field :DEFAULT, 0
   field :V4, 1
   field :V6, 2
+  field :PIPE, 3
+  field :INTERNAL, 4
 end
 
 defmodule Envoy.Config.Cluster.V3.ClusterCollection do
@@ -530,6 +536,25 @@ defmodule Envoy.Config.Cluster.V3.Cluster.PreconnectPolicy do
     type: Google.Protobuf.DoubleValue,
     json_name: "predictivePreconnectRatio",
     deprecated: false
+
+  field :preconnect_enabled_metadata, 3,
+    type: Envoy.Type.Matcher.V3.MetadataMatcher,
+    json_name: "preconnectEnabledMetadata"
+end
+
+defmodule Envoy.Config.Cluster.V3.Cluster.QueuingPolicies do
+  @moduledoc """
+  Queueing policies for the cluster.
+  """
+
+  use Protobuf,
+    full_name: "envoy.config.cluster.v3.Cluster.QueuingPolicies",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :pending_rq_policy, 1,
+    type: Envoy.Config.Core.V3.TypedExtensionConfig,
+    json_name: "pendingRqPolicy"
 end
 
 defmodule Envoy.Config.Cluster.V3.Cluster.TypedExtensionProtocolOptionsEntry do
@@ -546,7 +571,7 @@ end
 defmodule Envoy.Config.Cluster.V3.Cluster do
   @moduledoc """
   Configuration for a single upstream cluster.
-  [#next-free-field: 60]
+  [#next-free-field: 63]
   """
 
   use Protobuf,
@@ -569,6 +594,7 @@ defmodule Envoy.Config.Cluster.V3.Cluster do
 
   field :name, 1, type: :string, deprecated: false
   field :alt_stat_name, 28, type: :string, json_name: "altStatName", deprecated: false
+  field :stats_matcher, 61, type: Envoy.Config.Metrics.V3.StatsMatcher, json_name: "statsMatcher"
 
   field :type, 2,
     type: Envoy.Config.Cluster.V3.Cluster.DiscoveryType,
@@ -593,6 +619,11 @@ defmodule Envoy.Config.Cluster.V3.Cluster do
   field :per_connection_buffer_limit_bytes, 5,
     type: Google.Protobuf.UInt32Value,
     json_name: "perConnectionBufferLimitBytes",
+    deprecated: false
+
+  field :per_connection_buffer_high_watermark_timeout, 60,
+    type: Google.Protobuf.Duration,
+    json_name: "perConnectionBufferHighWatermarkTimeout",
     deprecated: false
 
   field :lb_policy, 6,
@@ -789,6 +820,10 @@ defmodule Envoy.Config.Cluster.V3.Cluster do
   field :connection_pool_per_downstream_connection, 51,
     type: :bool,
     json_name: "connectionPoolPerDownstreamConnection"
+
+  field :queuing_policies, 62,
+    type: Envoy.Config.Cluster.V3.Cluster.QueuingPolicies,
+    json_name: "queuingPolicies"
 end
 
 defmodule Envoy.Config.Cluster.V3.LoadBalancingPolicy.Policy do

@@ -1,7 +1,7 @@
 defmodule Envoy.Extensions.Network.DnsResolver.Cares.V3.CaresDnsResolverConfig do
   @moduledoc """
   Configuration for c-ares DNS resolver.
-  [#next-free-field: 12]
+  [#next-free-field: 13]
   [#protodoc-title: c-ares DNS resolver]
   [#extension: envoy.network.dns_resolver.cares]
   """
@@ -44,4 +44,9 @@ defmodule Envoy.Extensions.Network.DnsResolver.Cares.V3.CaresDnsResolverConfig d
     deprecated: false
 
   field :reinit_channel_on_timeout, 11, type: :bool, json_name: "reinitChannelOnTimeout"
+
+  field :qcache_max_ttl, 12,
+    type: Google.Protobuf.UInt32Value,
+    json_name: "qcacheMaxTtl",
+    deprecated: false
 end

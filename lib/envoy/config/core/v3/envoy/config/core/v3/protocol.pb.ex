@@ -101,7 +101,7 @@ end
 defmodule Envoy.Config.Core.V3.QuicProtocolOptions do
   @moduledoc """
   QUIC protocol options which apply to both downstream and upstream connections.
-  [#next-free-field: 12]
+  [#next-free-field: 14]
   """
 
   use Protobuf,
@@ -150,6 +150,13 @@ defmodule Envoy.Config.Core.V3.QuicProtocolOptions do
   field :connection_migration, 11,
     type: Envoy.Config.Core.V3.QuicProtocolOptions.ConnectionMigrationSettings,
     json_name: "connectionMigration"
+
+  field :memory_reduction_timeout, 12,
+    type: Google.Protobuf.Duration,
+    json_name: "memoryReductionTimeout",
+    deprecated: false
+
+  field :enable_scone, 13, type: Google.Protobuf.BoolValue, json_name: "enableScone"
 end
 
 defmodule Envoy.Config.Core.V3.UpstreamHttpProtocolOptions do
@@ -224,7 +231,7 @@ end
 
 defmodule Envoy.Config.Core.V3.HttpProtocolOptions do
   @moduledoc """
-  [#next-free-field: 8]
+  [#next-free-field: 9]
   """
 
   use Protobuf,
@@ -237,6 +244,10 @@ defmodule Envoy.Config.Core.V3.HttpProtocolOptions do
   field :max_connection_duration, 3,
     type: Google.Protobuf.Duration,
     json_name: "maxConnectionDuration"
+
+  field :max_connection_duration_jitter, 8,
+    type: Envoy.Type.V3.Percent,
+    json_name: "maxConnectionDurationJitter"
 
   field :max_headers_count, 2,
     type: Google.Protobuf.UInt32Value,
@@ -363,7 +374,7 @@ end
 
 defmodule Envoy.Config.Core.V3.Http2ProtocolOptions do
   @moduledoc """
-  [#next-free-field: 19]
+  [#next-free-field: 23]
   """
 
   use Protobuf,
@@ -442,6 +453,15 @@ defmodule Envoy.Config.Core.V3.Http2ProtocolOptions do
   field :enable_huffman_encoding, 18,
     type: Google.Protobuf.BoolValue,
     json_name: "enableHuffmanEncoding"
+
+  field :max_header_field_size_kb, 19,
+    type: Google.Protobuf.UInt32Value,
+    json_name: "maxHeaderFieldSizeKb",
+    deprecated: false
+
+  field :disallow_obs_text, 20, type: Google.Protobuf.BoolValue, json_name: "disallowObsText"
+  field :stream_reset_burst, 21, type: Google.Protobuf.UInt64Value, json_name: "streamResetBurst"
+  field :stream_reset_rate, 22, type: Google.Protobuf.UInt64Value, json_name: "streamResetRate"
 end
 
 defmodule Envoy.Config.Core.V3.GrpcProtocolOptions do
@@ -462,7 +482,7 @@ end
 defmodule Envoy.Config.Core.V3.Http3ProtocolOptions do
   @moduledoc """
   A message which allows using HTTP/3.
-  [#next-free-field: 9]
+  [#next-free-field: 10]
   """
 
   use Protobuf,
@@ -489,6 +509,8 @@ defmodule Envoy.Config.Core.V3.Http3ProtocolOptions do
   field :disable_connection_flow_control_for_streams, 8,
     type: :bool,
     json_name: "disableConnectionFlowControlForStreams"
+
+  field :disallow_obs_text, 9, type: Google.Protobuf.BoolValue, json_name: "disallowObsText"
 end
 
 defmodule Envoy.Config.Core.V3.SchemeHeaderTransformation do

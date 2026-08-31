@@ -48,6 +48,23 @@ defmodule Envoy.Extensions.Filters.Http.IpTagging.V3.IPTagging.IPTag do
   field :ip_list, 2, repeated: true, type: Envoy.Config.Core.V3.CidrRange, json_name: "ipList"
 end
 
+defmodule Envoy.Extensions.Filters.Http.IpTagging.V3.IPTagging.IPTags do
+  @moduledoc """
+  Specifies the content of the IP tag file.
+  Allow the file to be created with no IP tags.
+  """
+
+  use Protobuf,
+    full_name: "envoy.extensions.filters.http.ip_tagging.v3.IPTagging.IPTags",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :ip_tags, 1,
+    repeated: true,
+    type: Envoy.Extensions.Filters.Http.IpTagging.V3.IPTagging.IPTag,
+    json_name: "ipTags"
+end
+
 defmodule Envoy.Extensions.Filters.Http.IpTagging.V3.IPTagging.IpTagHeader do
   @moduledoc """
   Specify to which header the tags will be written.
@@ -67,7 +84,7 @@ end
 
 defmodule Envoy.Extensions.Filters.Http.IpTagging.V3.IPTagging do
   @moduledoc """
-  [#next-free-field: 6]
+  [#next-free-field: 7]
   [#protodoc-title: IP tagging]
   IP tagging :ref:`configuration overview <config_http_filters_ip_tagging>`.
   [#extension: envoy.filters.http.ip_tagging]
@@ -87,10 +104,13 @@ defmodule Envoy.Extensions.Filters.Http.IpTagging.V3.IPTagging do
   field :ip_tags, 4,
     repeated: true,
     type: Envoy.Extensions.Filters.Http.IpTagging.V3.IPTagging.IPTag,
-    json_name: "ipTags",
-    deprecated: false
+    json_name: "ipTags"
 
   field :ip_tag_header, 5,
     type: Envoy.Extensions.Filters.Http.IpTagging.V3.IPTagging.IpTagHeader,
     json_name: "ipTagHeader"
+
+  field :ip_tags_datasource, 6,
+    type: Envoy.Config.Core.V3.DataSource,
+    json_name: "ipTagsDatasource"
 end

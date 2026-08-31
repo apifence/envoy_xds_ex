@@ -19,6 +19,7 @@ end
 defmodule Envoy.Config.Metrics.V3.StatsConfig do
   @moduledoc """
   Statistics configuration such as tagging.
+  [#next-free-field: 6]
   """
 
   use Protobuf,
@@ -38,6 +39,10 @@ defmodule Envoy.Config.Metrics.V3.StatsConfig do
     repeated: true,
     type: Envoy.Config.Metrics.V3.HistogramBucketSettings,
     json_name: "histogramBucketSettings"
+
+  field :allow_default_tag_overrides, 5,
+    type: Google.Protobuf.BoolValue,
+    json_name: "allowDefaultTagOverrides"
 end
 
 defmodule Envoy.Config.Metrics.V3.StatsMatcher do

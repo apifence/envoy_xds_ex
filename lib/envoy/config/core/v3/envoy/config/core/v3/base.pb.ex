@@ -279,6 +279,20 @@ defmodule Envoy.Config.Core.V3.RuntimeUInt32 do
   field :runtime_key, 3, type: :string, json_name: "runtimeKey"
 end
 
+defmodule Envoy.Config.Core.V3.RuntimeUInt64 do
+  @moduledoc """
+  Runtime derived uint64 with a default when not specified.
+  """
+
+  use Protobuf,
+    full_name: "envoy.config.core.v3.RuntimeUInt64",
+    protoc_gen_elixir_version: "0.17.0",
+    syntax: :proto3
+
+  field :default_value, 2, type: :uint64, json_name: "defaultValue"
+  field :runtime_key, 3, type: :string, json_name: "runtimeKey"
+end
+
 defmodule Envoy.Config.Core.V3.RuntimePercent do
   @moduledoc """
   Runtime derived percentage with a default when not specified.
@@ -460,6 +474,7 @@ defmodule Envoy.Config.Core.V3.WatchedDirectory do
     syntax: :proto3
 
   field :path, 1, type: :string, deprecated: false
+  field :watch_modify, 2, type: :bool, json_name: "watchModify"
 end
 
 defmodule Envoy.Config.Core.V3.DataSource do

@@ -16,6 +16,10 @@ defmodule Envoy.Extensions.Path.Match.UriTemplate.V3.UriTemplateMatchConfig do
        The path component matching videos/* is captured as the named variable.
 
   * ``{name=**}`` : A named variable matching zero or more path segments.
+
+  * ``prefix{name}suffix`` : A named variable with surrounding literal text within a single path
+       segment. For example, ``v{version}`` or ``{id}.json``. The variable captures only the
+       dynamic portion; the prefix and suffix must match literally.
   For example:
 
   * ``/videos/*/*/*.m4s`` would match ``videos/123414/hls/1080p5000_00001.m4s``
@@ -23,6 +27,9 @@ defmodule Envoy.Extensions.Path.Match.UriTemplate.V3.UriTemplateMatchConfig do
   * ``/videos/{file}`` would match ``/videos/1080p5000_00001.m4s``
 
   * ``/**.mpd`` would match ``/content/123/india/dash/55/manifest.mpd``
+
+  * ``/api/v{version}/users/{id}.json`` would match ``/api/v2/users/456.json`` and
+       capture ``version=2`` and ``id=456``.
   [#protodoc-title: Uri Template Match Config]
   [#extension: envoy.path.match.uri_template.uri_template_matcher]
   """

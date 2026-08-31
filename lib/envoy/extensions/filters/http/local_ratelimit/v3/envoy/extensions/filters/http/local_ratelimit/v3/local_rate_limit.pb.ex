@@ -1,6 +1,6 @@
 defmodule Envoy.Extensions.Filters.Http.LocalRatelimit.V3.LocalRateLimit do
   @moduledoc """
-  [#next-free-field: 19]
+  [#next-free-field: 20]
   [#protodoc-title: Local Rate limit]
   Local Rate limit :ref:`configuration overview <config_http_filters_local_rate_limit>`.
   [#extension: envoy.filters.http.local_ratelimit]
@@ -78,4 +78,6 @@ defmodule Envoy.Extensions.Filters.Http.LocalRatelimit.V3.LocalRateLimit do
     type: Google.Protobuf.UInt32Value,
     json_name: "maxDynamicDescriptors",
     deprecated: false
+
+  field :enable_retry_after_header, 19, type: :bool, json_name: "enableRetryAfterHeader"
 end

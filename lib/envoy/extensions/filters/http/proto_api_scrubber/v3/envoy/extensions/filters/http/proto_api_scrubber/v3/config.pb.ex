@@ -41,6 +41,8 @@ defmodule Envoy.Extensions.Filters.Http.ProtoApiScrubber.V3.ProtoApiScrubberConf
     type: Envoy.Extensions.Filters.Http.ProtoApiScrubber.V3.ProtoApiScrubberConfig.FilteringMode,
     json_name: "filteringMode",
     enum: true
+
+  field :scrub_unknown_fields, 4, type: :bool, json_name: "scrubUnknownFields"
 end
 
 defmodule Envoy.Extensions.Filters.Http.ProtoApiScrubber.V3.DescriptorSet do
